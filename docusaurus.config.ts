@@ -41,7 +41,7 @@ const config: Config = {
         blog: false,
         docs: {
           routeBasePath: '/',
-          editUrl: 'https://github.com/mixa3607/mixa3607.github.io/edit/master',
+          editUrl: 'https://github.com/mixa3607/mixa3607.github.com/edit/master',
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
