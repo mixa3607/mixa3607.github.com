@@ -78,6 +78,8 @@ const config: Config = {
         language: ["en", "ru"],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
+        indexBlog: false,
+        docsRouteBasePath: '/',
       }),
     ],
   ],
