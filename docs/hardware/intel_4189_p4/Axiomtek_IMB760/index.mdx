@@ -1,0 +1,93 @@
+---
+title: Axiomtek IMB760
+sidebar_position: 20
+---
+import CodeBlock from "@theme/CodeBlock";
+import DocCardList from "@theme/DocCardList";
+import biosdecode from "!!raw-loader!./biosdecode.txt";
+import dmidecode from "!!raw-loader!./dmidecode.txt";
+import sensors from "!!raw-loader!./sensors.txt";
+
+# Axiomtek IMB760
+
+Dual LGA4189 motherboard
+
+На самом деле речь не о ней напрямую, но о [Плата системная DPC627A, ДАЦН.469535.031](https://gisp.gov.ru/goods/#/product/3700848) что по факту и есть тот самый аксиомтек. Даже на заставке биоса написано `IMB760`. **У DEPO есть нормальные BMC и BIOS, но они их не дают**
+
+![](./image.png)
+
+## Docs
+
+- [Axiomtek Release info](@storageBaseUrl@/Axiomtek-IMB760/docs/IMB760-Review_07-03-2024.pdf)
+- [Axiomtek IMB760 User's Manual VA1_06-02-2022](@storageBaseUrl@/Axiomtek-IMB760/docs/IMB760-User-Manual-VA1_06-02-2022.pdf)
+- [DEPO BMC Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BMC_DPC627-A.pdf)
+- [DEPO BIOS Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BIOS_DPC627-A.pdf)
+
+## Specs
+
+- [BMC AST2500](./BMC/index.mdx)
+- [AMI Aptio BIOS](./BIOS/index.mdx)
+- mosfets 7x MP86956 delivers 70A per socket ([source](https://forum.ixbt.com/topic.cgi?id=9:70249:141#141))
+- all es 4-6 stepping cpus works
+- only 24 pin + 2x cpu 8 pin is required, all other is optional
+
+<details>
+  <summary>`$ biosdecode`</summary>
+  <CodeBlock>{biosdecode}</CodeBlock>
+</details>
+
+<details>
+  <summary>`$ dmidecode`</summary>
+  <CodeBlock>{dmidecode}</CodeBlock>
+</details>
+
+## Проблемы и их решения (?)
+- Q: Винтики для М2 больше стандартных?
+    - A: Да, используются M3 (5mm+-)
+- Q: Тесты подсистемы памяти в AIDA64 показывают какие то странные цифры
+    - A: Бывает, используйте [intel mlc](../../tools/index.md#intel-mlc)
+- [...BIOS](./BIOS/index.mdx#проблемы-и-их-решения-)
+- [...BMC](./BMC/index.mdx#проблемы-и-их-решения-)
+
+## Sensors
+### All sensors
+
+<details>
+  <summary>`$ sensors`</summary>
+  <CodeBlock>{sensors}</CodeBlock>
+</details>
+
+### Sesors matching
+```console title="/etc/sensors.d/imb760.conf"
+bus "i2c-0" "SMBus I801 adapter at 0780"
+
+chip "nct7802-i2c-0-28"
+label fan1 "FAN1"
+label fan2 "FAN2"
+label fan3 "FAN3"
+
+chip "nct7802-i2c-0-2f"
+label fan1 "FAN4"
+label fan2 "FAN5"
+label fan3 "FAN6"
+
+chip "f81768d-isa-0a20"
+label fan1 "FAN-CPU1"
+label fan2 "FAN-CPU2"
+ignore fan3
+```
+
+## Manual fan control
+Способа крутить обороты из BMC найдено не было, все стандартные и не очень `impi raw` команды не проходят
+
+### Cpu fans
+Если я правильно понимаю то настроить поведение вертушек на цпу можно только через меню в биосе (см. маунал)
+
+### Sys fans
+Системные вертушки можно легко крутить из системы. Всё достаточно стандартно
+```bash
+$ echo 1  | sudo tee /sys/class/hwmon/hwmon7/pwm2_enable  #enable FAN2 manual mode
+$ echo 50 | sudo tee /sys/class/hwmon/hwmon7/pwm2         #set FAN2 to 50 (allowed 0-255)
+```
+
+<DocCardList />

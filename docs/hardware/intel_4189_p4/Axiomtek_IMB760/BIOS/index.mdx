@@ -1,0 +1,71 @@
+---
+title: BIOS
+sidebar_position: 20
+---
+
+# BIOS
+
+BIOS на базе `AMI Aptio` и флеша `W25Q256JVFQ`
+
+## Docs
+
+- [Winbond W25Q256JV Datasheet](@storageBaseUrl@/Axiomtek-IMB760/docs/W25Q256JV-SPI-RevQ-02072025-Plus.pdf)
+- [Axiomtek IMB760 User's Manual VA1_06-02-2022](@storageBaseUrl@/Axiomtek-IMB760/docs/IMB760-User-Manual-VA1_06-02-2022.pdf)
+- [DEPO BIOS Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BIOS_DPC627-A.pdf)
+
+## Прошивки
+
+На данный момент известны 2 прошивки, но получить удалось только одну + 1 мод
+
+- Axiomtek AMI Aptio `IMB760 V1.00 / 5.21`
+- DEPO AMI Aptio `1.0`
+
+Способ зашивки кроме как прищепкой изучается.
+
+:::warning danger "CH341"
+Им можно шить, но проверьте что он у вас либо с завода на 3,3в, либо что вы его переделали. Мануалы есть в интернете к примеру https://wiki.chucknemeth.com/usb-devices/ch341a/3v-ch341a-mod
+:::
+
+### Axiomtek AMI Aptio `V1.00 / 5.21`
+
+```yaml
+vendor: American Megatrends International, LLC.
+version: IMB760 V1.00
+systemBiosMajorRelease: 5
+systemBiosMinorRelease: 21
+```
+
+Стоковый BIOS из аксиомтека.
+
+#### Проблемы и их решения (?)
+
+- Q: UEFI не видит csm boot devices?
+  - A: Завести не удалось
+
+#### Dumps
+
+| Name                                              | SN         | About                  | Download                                                                                        |
+| ------------------------------------------------- | ---------- | ---------------------- | ----------------------------------------------------------------------------------------------- |
+| IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin)   |
+| IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
+| IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin)  |
+| IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin       | 1118199507 | after reset            | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin)       |
+| IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin |            | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin) |
+
+Уверенность что нетронутый заводской BIOS есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть бут `SN: 1118199507`
+
+### Axiomtek AMI Aptio MOD `A1`
+
+```yaml
+vendor: American Megatrends International, LLC.
+version: IMB760 V1.00; patch 64cc788
+systemBiosMajorRelease: 5
+systemBiosMinorRelease: 21
+```
+
+Мод биос базирующийся на [Axiomtek AMI Aptio `V1.00 / 5.21`](#axiomtek-ami-aptio-v100--521).
+
+- Скачать [github: mixa3607/ami-patching-infra](https://github.com/mixa3607/ami-patching-infra/releases)
+- Анлокнуты многие меню, часть проверена и работает, часть нет
+
+Пока есть много неизвестных моментов, вэлкам ту PR на [github: mixa3607/ami-patching-infra](https://github.com/mixa3607/ami-patching-infra?tab=readme-ov-file#%D1%81%D1%82%D0%B0%D1%82%D1%83%D1%81-%D0%BF%D0%BE-%D0%BC%D0%B5%D0%BD%D1%8E)

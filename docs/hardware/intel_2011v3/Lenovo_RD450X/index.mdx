@@ -1,0 +1,60 @@
+---
+title: Lenovo RD450x
+sidebar_position: 20
+---
+
+import DocCardList from "@theme/DocCardList";
+
+# Lenovo RD450x
+
+Поделие сумрачного китайского гения.
+Вероятно поставлялась в дата центры крупных китайский компаний, типа Tencent и baidu по спец заказу.
+На сайте Lenovo тех. поддержка не доступна. Гарантийный срок на эти платы закончился.
+
+![board](./image.png)
+
+## Docs
+
+- Manual [Lenovo RD450X 用户手册 V1.0 2015-1-28](@storageBaseUrl@/Lenovo-RD450x/docs/Lenovo-RD450X-用户手册-V1.0-2015-1-28.pdf)
+- Compatible ipmi [Lenovo BMC Command List V0.1.1](@storageBaseUrl@/Lenovo-RD450x/docs/Lenovo-BMC-Command-List_V0.1.1.pdf)
+
+## Управление вертушками и прочие вкусности
+
+Для вертушек смотрите блок **3.3 Set Fan Configuration Command** in `Lenovo BMC Command List V0.1.1`
+
+Общий концепт такой:
+
+```csharp title="ManualFanControl.cs"
+public enum LenovoIpmiFanType
+{
+    ALL = 0,
+    SYS_FAN1 = 1,
+    SYS_FAN2 = 2,
+    SYS_FAN3 = 3,
+    SYS_FAN4 = 4,
+    CPU_FAN1 = 5,
+    CPU_FAN2 = 6,
+}
+
+public async Task SetFanSpeedAsync(LenovoIpmiFanType fan, int percentage)
+{
+    if (percentage > 100)
+        percentage = 100;
+
+    if (percentage < 0)
+        percentage = 100;
+
+    new ProcessStartInfo()
+    {
+        FileName = _options.IpmiToolFile ?? "ipmitool",
+        Arguments = $"{_options.AccessArgs} raw 0x2e 0x30 00 {(int)fan} {percentage}",
+        RedirectStandardError = true,
+        RedirectStandardOutput = true,
+        RedirectStandardInput = false,
+    }
+}
+```
+
+## More
+
+<DocCardList />

@@ -1,0 +1,108 @@
+Handle 0x0058, DMI type 7, 27 bytes
+Cache Information
+        Socket Designation: L1-Cache
+        Configuration: Enabled, Not Socketed, Level 1
+        Operational Mode: Write Back
+        Location: Internal
+        Installed Size: 3040 kB
+        Maximum Size: 3040 kB
+        Supported SRAM Types:
+                Synchronous
+        Installed SRAM Type: Synchronous
+        Speed: Unknown
+        Error Correction Type: Single-bit ECC
+        System Type: Unified
+        Associativity: 8-way Set-associative
+
+Handle 0x0059, DMI type 7, 27 bytes
+Cache Information
+        Socket Designation: L2-Cache
+        Configuration: Enabled, Not Socketed, Level 2
+        Operational Mode: Varies With Memory Address
+        Location: Internal
+        Installed Size: 48640 kB
+        Maximum Size: 48640 kB
+        Supported SRAM Types:
+                Synchronous
+        Installed SRAM Type: Synchronous
+        Speed: Unknown
+        Error Correction Type: Single-bit ECC
+        System Type: Unified
+        Associativity: 20-way Set-associative
+
+Handle 0x005A, DMI type 7, 27 bytes
+Cache Information
+        Socket Designation: L3-Cache
+        Configuration: Enabled, Not Socketed, Level 3
+        Operational Mode: Varies With Memory Address
+        Location: Internal
+        Installed Size: 57 MB
+        Maximum Size: 57 MB
+        Supported SRAM Types:
+                Synchronous
+        Installed SRAM Type: Synchronous
+        Speed: Unknown
+        Error Correction Type: Single-bit ECC
+        System Type: Unified
+        Associativity: 12-way Set-associative
+
+Handle 0x005B, DMI type 4, 48 bytes
+Processor Information
+        Socket Designation: CPU1
+        Type: Central Processor
+        Family: Xeon
+        Manufacturer: Intel(R) Corporation
+        ID: A6 06 06 00 FF FB EB BF
+        Signature: Type 0, Family 6, Model 106, Stepping 6
+        Flags:
+                FPU (Floating-point unit on-chip)
+                VME (Virtual mode extension)
+                DE (Debugging extension)
+                PSE (Page size extension)
+                TSC (Time stamp counter)
+                MSR (Model specific registers)
+                PAE (Physical address extension)
+                MCE (Machine check exception)
+                CX8 (CMPXCHG8 instruction supported)
+                APIC (On-chip APIC hardware supported)
+                SEP (Fast system call)
+                MTRR (Memory type range registers)
+                PGE (Page global enable)
+                MCA (Machine check architecture)
+                CMOV (Conditional move instruction supported)
+                PAT (Page attribute table)
+                PSE-36 (36-bit page size extension)
+                CLFSH (CLFLUSH instruction supported)
+                DS (Debug store)
+                ACPI (ACPI supported)
+                MMX (MMX technology supported)
+                FXSR (FXSAVE and FXSTOR instructions supported)
+                SSE (Streaming SIMD extensions)
+                SSE2 (Streaming SIMD extensions 2)
+                SS (Self-snoop)
+                HTT (Multi-threading)
+                TM (Thermal monitor supported)
+                PBE (Pending break enabled)
+        Version: Genuine Intel(R) CPU 0000%@
+        Voltage: 1.6 V
+        External Clock: 100 MHz
+        Max Speed: 4000 MHz
+        Current Speed: 2200 MHz
+        Status: Populated, Enabled
+        Upgrade: Socket LGA4189
+        L1 Cache Handle: 0x0058
+        L2 Cache Handle: 0x0059
+        L3 Cache Handle: 0x005A
+        Serial Number: Not Specified
+        Asset Tag: UNKNOWN
+        Part Number: Not Specified
+        Core Count: 38
+        Core Enabled: 38
+        Thread Count: 76
+        Characteristics:
+                64-bit capable
+                Multi-Core
+                Hardware Thread
+                Execute Protection
+                Enhanced Virtualization
+                Power/Performance Control

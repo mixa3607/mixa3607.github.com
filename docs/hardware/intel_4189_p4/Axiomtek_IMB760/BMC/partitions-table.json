@@ -1,0 +1,76 @@
+{
+  "partitions": [
+    {
+      "fileName": "01_uboot.bin",
+      "description": "U-Boot data",
+      "beginAddress": "0x00000000",
+      "endAddress": "0x00040000",
+      "fileSystem": "raw",
+      "mount": null
+    },
+    {
+      "fileName": "02_uboot-env.bin",
+      "description": "U-Boot env data",
+      "beginAddress": "0x00040000",
+      "endAddress": "0x0004FFFC",
+      "fileSystem": "raw",
+      "mount": null
+    },
+    {
+      "fileName": "20_conf-main.bin",
+      "description": "RW conf files",
+      "beginAddress": "0x00060000",
+      "endAddress": "0x000D0000",
+      "fileSystem": "jffs2",
+      "mount": "/conf"
+    },
+    {
+      "fileName": "30_conf-bak.bin",
+      "description": "RW conf backup files",
+      "beginAddress": "0x000E0000",
+      "endAddress": "0x00150000",
+      "fileSystem": "jffs2",
+      "mount": "/bkupconf"
+    },
+    {
+      "fileName": "40_conf-unk.bin",
+      "description": "Unknown purpose backup files (failsafe?)",
+      "beginAddress": "0x00160000",
+      "endAddress": "0x001D0000",
+      "fileSystem": "jffs2",
+      "mount": null
+    },
+    {
+      "fileName": "50_root.bin",
+      "description": "Root fs",
+      "beginAddress": "0x001E0000",
+      "endAddress": "0x01111000",
+      "fileSystem": "cramfs",
+      "mount": "/"
+    },
+    {
+      "fileName": "60_uimage.bin",
+      "description": "Kernel U-Image",
+      "beginAddress": "0x01120040",
+      "endAddress": "0x014731B8",
+      "fileSystem": "raw",
+      "mount": null
+    },
+    {
+      "fileName": "70_web-data.bin",
+      "description": "web data",
+      "beginAddress": "0x01490000",
+      "endAddress": "0x016CB000",
+      "fileSystem": "cramfs",
+      "mount": "/usr/local/www"
+    },
+    {
+      "fileName": "80_ast2500e.bin",
+      "description": "FW info",
+      "beginAddress": "0x01FF0040",
+      "endAddress": "0x01FF00DD",
+      "fileSystem": "string",
+      "mount": null
+    }
+  ]
+}

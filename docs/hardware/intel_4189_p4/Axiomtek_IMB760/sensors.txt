@@ -1,0 +1,149 @@
+nct7802-i2c-0-2f
+Adapter: SMBus I801 adapter at 0780
+in0:           3.36 V  (min =  +0.00 V, max =  +4.09 V)
+in1:         664.00 mV
+FAN4:           0 RPM  (min =    0 RPM)
+FAN5:           0 RPM  (min =    0 RPM)
+FAN6:           0 RPM  (min =    0 RPM)
+temp1:        +30.1°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp2:        +36.0°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp3:        +36.1°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp4:        +30.0°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)
+temp5:         +0.0°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)
+
+power_meter-acpi-0
+Adapter: ACPI interface
+power1:           N/A  (interval = 4294967.29 s)
+
+f81768d-isa-0a20
+Adapter: ISA adapter
+in0:           1.65 V
+in1:           1.60 V  (max =  +2.04 V)
+in2:         984.00 mV
+in3:           2.04 V
+in4:           2.04 V
+in5:           0.00 V
+in6:           0.00 V
+in7:           1.65 V
+in8:           1.65 V
+in9:           1.66 V
+in10:          1.65 V
+FAN-CPU1:    1347 RPM
+FAN-CPU2:    1178 RPM
+temp1:        +31.0°C  (high = +85.0°C, hyst = +81.0°C)
+                       (crit = +100.0°C, hyst = +96.0°C)  sensor = transistor
+temp2:        +32.0°C  (high = +85.0°C, hyst = +81.0°C)
+                       (crit = +100.0°C, hyst = +96.0°C)  sensor = transistor
+temp3:          FAULT  (high = +70.0°C, hyst = +68.0°C)
+                       (crit = +85.0°C, hyst = +83.0°C)  sensor = transistor
+
+coretemp-isa-0000
+Adapter: ISA adapter
+Package id 0:  +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 0:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 1:        +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 2:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 3:        +27.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 4:        +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 5:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 6:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 7:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 8:        +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 9:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 10:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 11:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 12:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 13:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 14:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 15:       +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 16:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 17:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 18:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 19:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 20:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 21:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 22:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 23:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 24:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 25:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 26:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 27:       +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 28:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 29:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 30:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 31:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 32:       +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 33:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 34:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 35:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 36:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 37:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+
+nct7802-i2c-0-28
+Adapter: SMBus I801 adapter at 0780
+in0:           3.37 V  (min =  +0.00 V, max =  +4.09 V)
+in1:         680.00 mV
+FAN1:           0 RPM  (min =    0 RPM)
+FAN2:        1036 RPM  (min =    0 RPM)
+FAN3:           0 RPM  (min =    0 RPM)
+temp1:        +30.8°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp2:        +33.1°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp3:        +39.6°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)  sensor = thermistor
+temp4:        +31.0°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)
+temp5:         +0.0°C  (low  =  +0.0°C, high = +85.0°C)
+                       (crit = +100.0°C)
+
+pch_lewisburg-virtual-0
+Adapter: Virtual device
+temp1:        +36.0°C
+
+coretemp-isa-0001
+Adapter: ISA adapter
+Package id 1:  +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 0:        +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 1:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 2:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 3:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 4:        +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 5:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 6:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 7:        +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 8:        +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 9:        +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 10:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 11:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 12:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 13:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 14:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 15:       +32.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 16:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 17:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 18:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 19:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 20:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 21:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 22:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 23:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 24:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 25:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 26:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 27:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 28:       +28.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 29:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 30:       +31.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 31:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 32:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 33:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 34:       +30.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 35:       +28.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 36:       +29.0°C  (high = +97.0°C, crit = +107.0°C)
+Core 37:       +29.0°C  (high = +97.0°C, crit = +107.0°C)

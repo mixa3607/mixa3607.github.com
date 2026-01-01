@@ -1,0 +1,8 @@
+echo "MAX freq" >> freqs.txt
+echo 5000000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+sleep 1s
+cat /proc/cpuinfo | grep "MHz" | sed -E 's|.* ([0-9]+)\..*|\1|1' | sort -hr | uniq -c >> freqs.txt
+echo "MIN freq" >> freqs.txt
+echo 1 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
+sleep 1s
+cat /proc/cpuinfo | grep "MHz" | sed -E 's|.* ([0-9]+)\..*|\1|1' | sort -hr | uniq -c >> freqs.txt

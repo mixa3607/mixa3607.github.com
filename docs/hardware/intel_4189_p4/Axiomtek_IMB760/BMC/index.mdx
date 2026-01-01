@@ -1,0 +1,110 @@
+---
+title: BMC
+sidebar_position: 10
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import partitiontable from "!!raw-loader!./partitions-table.json";
+
+# BMC
+
+BMC на базе `AST2500` и флеша `W25Q256JVFQ`
+
+<details>
+  <summary>Screenshot</summary>
+
+![bmc web ui screenshot](./bmc-screenshot.png)
+
+</details>
+
+## Docs
+
+- [Winbond W25Q256JV Datasheet](@storageBaseUrl@/Axiomtek-IMB760/docs/W25Q256JV-SPI-RevQ-02072025-Plus.pdf)
+- [AST2500 Software Programming Guide](@storageBaseUrl@/Axiomtek-IMB760/docs/AST2500-Software-Programming-Guide.pdf)
+- [DEPO BMC Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BMC_DPC627-A.pdf)
+
+## Проблемы и их решения (?)
+### Кажется или в BMC неверные данные по температурам?
+Не кажется. Не смотрим на попугаи в BMC, но вольтаж и обороты вертушек там правильно показывает (с округлением до сотен)
+
+### Не могу получить картинку через джаву
+Полный мануал что и как можно [посмотреть тут](../../../modding-and-hacks/megarac_java_console/index.md), отличие только в том что П1 не нужно делать. Проверено на связке с [BMC 2.02.76714](#axiomtek-ami-megarac-sp-20276714)
+
+## Прошивки
+
+На данный момент известны 2 прошивки, но получить удалось только одну
+
+- Axiomtek AMI Megarac SP `Linux version 3.14.17-ami (AMI@localhost) (gcc version 4.6.1 (Sourcery CodeBench Lite 2011.09-70) ) #1 Mon Aug 8 14:34:54 CST 2022`
+- DEPO OpenBMC
+
+Способ зашивки кроме как прищепкой изучается.
+
+:::warning danger "CH341"
+Им можно шить, но проверьте что он у вас либо с завода на 3,3в, либо что вы его переделали. Мануалы есть в интернете к примеру https://wiki.chucknemeth.com/usb-devices/ch341a/3v-ch341a-mod
+:::
+
+### Axiomtek AMI Megarac SP 2.02.76714
+
+```ini
+FW_VERSION=2.02.76714
+FW_DATE=Aug 8 2022
+FW_BUILDTIME=14:45:58 CST
+FW_DESC=RR10 AST2500 KERN3 BUILD 2
+FW_PRODUCTID=1
+FW_RELEASEID=RR9
+FW_CODEBASEVERSION=3.X
+```
+
+#### Dumps
+
+| Name                                             | SN         | MAC BMC; shared; 1; 2;                                  | About                  | Download                                                                                      |
+| ------------------------------------------------ | ---------- | ------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------- |
+| IMB760_BMC_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | F8CC6E033B82; F8CC6E033CAE; F8CC6E033DDA; F8CC6E033F06; | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033B82_zero-boot.bin)   |
+| IMB760_BMC_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | F8CC6E033BA3; F8CC6E933CCF; F8CC6E033DFB; F8CC6E033F27; | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
+| IMB760_BMC_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | F8CC6E033BF2; F8CC6E033D1E; F8CC6E033E4A; F8CC6E033F76; | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033BF2_configured.bin)  |
+| IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin |            | F8CC6E033B9D; ; ; ;                                     | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin) |
+
+Уверенность что нетронутый заводской BMC есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть сеть `SN: 1118199507`, маки валидыные стоят в u-boot env var секции.
+
+## Change BMC fan thresholds
+
+```console
+$ sudo ipmitool sensor thresh FAN1 lower  0 0 0
+Locating sensor record 'FAN1'...
+Setting sensor "FAN1" Lower Non-Recoverable threshold to 0.000
+Setting sensor "FAN1" Lower Critical threshold to 0.000
+Setting sensor "FAN1" Lower Non-Critical threshold to 0.000
+
+$ # run prev command for all FANx
+$ sudo ipmitool sensor list all
++12V             | 12.100     | Volts      | ok    | 9.600     | 10.200    | 10.800    | 13.200    | 13.800    | 14.400
++5V              | 4.928      | Volts      | ok    | 4.510     | 4.620     | 4.752     | 5.258     | 5.368     | 5.500
++3.3V            | 3.300      | Volts      | ok    | 2.978     | 3.051     | 3.139     | 3.460     | 3.548     | 3.635
++5VSB            | 4.906      | Volts      | ok    | 4.510     | 4.620     | 4.752     | 5.258     | 5.368     | 5.500
++3VSB            | 3.285      | Volts      | ok    | 2.978     | 3.051     | 3.139     | 3.460     | 3.548     | 3.635
+SYS1_TEMP        | 31.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 70.000    | 90.000    | 100.000
+CPU1_TEMP        | 37.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 100.000   | 110.000   | 120.000
+SYS2/CPU2_TEMP   | 37.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 100.000   | 110.000   | 120.000
+FAN1             | 1200.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN2             | 1000.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN3             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN4             | 1000.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN5             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN6             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN7             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+FAN8             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
+```
+
+Как заставить материнку считать 0 оборотов нормой не нашёл, они всегда вываливаются в `non rec` mode
+
+### BMC modding / MAC restore
+
+:::warning 🚧Under contruction🚧
+:::
+
+<details>
+  <summary>`partitions table`</summary>
+  <CodeBlock language="json" title="partitions-table.json">
+    {partitiontable}
+  </CodeBlock>
+</details>

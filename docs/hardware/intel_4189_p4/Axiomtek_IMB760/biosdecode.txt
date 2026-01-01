@@ -1,0 +1,38 @@
+# biosdecode 3.5
+SMBIOS 3.3 present.
+        Structure Table Length: 7692 bytes
+        Structure Table Address: 0x000E6E00
+        Number Of Structures: 97
+        Maximum Structure Size: 184 bytes
+SMBIOS 3.3.0 present.
+        Structure Table Maximum Length: 7692 bytes
+        Structure Table 64-bit Address: 0x00000000000E6E00
+PNP BIOS 1.0 present.
+        Event Notification: Not Supported
+        Real Mode 16-bit Code Address: F000:BE16
+        Real Mode 16-bit Data Address: F000:0000
+        16-bit Protected Mode Code Address: 0x000FBE3E
+        16-bit Protected Mode Data Address: 0x000F0000
+PCI Interrupt Routing 1.0 present.
+        Router Device: 00:1f.0
+        Exclusive IRQs: None
+        Compatible Router: 8086:27b8
+        Device: 00:01, on-board
+        Device: 00:02, on-board
+        Device: 00:11, on-board
+        Device: 00:14, on-board
+        Device: 00:16, on-board
+        Device: 00:17, on-board
+        Device: 01:00, slot 3
+        Device: 00:1c, on-board
+        Device: 02:00, on-board
+        Device: 00:1d, on-board
+        Device: 05:00, slot 238
+        Device: 04:00, on-board
+        Device: 06:00, on-board
+        Device: 65:00, on-board
+        Device: 64:02, on-board
+        Device: 80:01, on-board
+        Device: 00:00, on-board
+        Device: e3:00, slot 238
+        Device: e2:04, on-board

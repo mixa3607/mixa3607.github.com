@@ -1,0 +1,43 @@
+---
+title: <code> <name>
+sidebar_position: 10
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import DocCardList from "@theme/DocCardList";
+
+import dmidecode from "!!raw-loader!./dmidecode.txt";
+import lscpu from "!!raw-loader!./lscpu.txt";
+import freqs from "!!raw-loader!./freqs.txt";
+
+```
+Sample name: <code>
+Release name: <name>
+Stepping: <stepping>
+Average price: <price>
+```
+
+<Tabs>
+  <TabItem value="freqs" label="max/min freqs" default>
+    <CodeBlock>{freqs}</CodeBlock>
+  </TabItem>
+  <TabItem value="lscpu" label="$ lscpu">
+    <CodeBlock>{lscpu}</CodeBlock>
+  </TabItem>
+  <TabItem value="dmidecode" label="$ dmidecode">
+    <CodeBlock>{dmidecode}</CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Cinebench R23 (Dual setup)
+
+<Tabs>
+  <TabItem value="CinebenchR23-76" label="MT off" default>
+    ![](./CinebenchR23-76.png)
+  </TabItem>
+  <TabItem value="CinebenchR23-152" label="MT on" default>
+    ![](./CinebenchR23-152.png)
+  </TabItem>
+</Tabs>
