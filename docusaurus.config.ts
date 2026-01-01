@@ -18,7 +18,7 @@ const config: Config = {
   title: 'KBD',
   tagline: 'docs',
   favicon: 'img/favicon.png',
-  url: 'https://mixa3607.github.io',
+  url: 'https://arkprojects.space',
   baseUrl: '/',
   trailingSlash: false,
   organizationName: 'mixa3607',
@@ -26,7 +26,7 @@ const config: Config = {
   onBrokenLinks: 'throw',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'ru'],
+    locales: ['en'],
   },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -75,7 +75,7 @@ const config: Config = {
       /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
       ({
         hashed: true,
-        language: ["en", "ru"],
+        language: ["en"],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
