@@ -1,0 +1,21 @@
+ami:
+  label: 'AMI'
+bmc:
+  label: 'BMC'
+bios:
+  label: 'BIOS'
+megarac-sp:
+  label: 'Megarac SP'
+  description: 'AMI Megarac SP'
+lga4189p4:
+  label: 'LGA4189 P4'
+  description: 'Intel LGA4189 P4'
+lga2011v3:
+  label: 'LGA2011v3'
+  description: 'Intel LGA2011v3'
+motherboard:
+  label: 'Motherboard'
+cpu:
+  label: 'CPU'
+ram:
+  label: 'RAM'

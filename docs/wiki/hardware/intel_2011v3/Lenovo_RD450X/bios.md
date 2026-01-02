@@ -1,6 +1,10 @@
 ---
 title: BIOS
 sidebar_position: 20
+tags:
+  - bios
+  - lga2011v3
+  - motherboard
 ---
 # BIOS
 BIOS'ы под плату

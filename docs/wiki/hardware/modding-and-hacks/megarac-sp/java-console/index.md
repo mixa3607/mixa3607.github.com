@@ -1,6 +1,10 @@
 ---
-title: Megarac SP Java console
+title: Java console
 sidebar_position: 20
+tags:
+  - megarac-sp
+  - bmc
+  - ami
 ---
 
 # Megarac SP Java console

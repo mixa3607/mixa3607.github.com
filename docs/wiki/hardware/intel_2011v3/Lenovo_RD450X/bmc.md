@@ -1,6 +1,10 @@
 ---
 title: BMC
 sidebar_position: 10
+tags:
+  - bmc
+  - lga2011v3
+  - motherboard
 ---
 # BMC
 
@@ -53,7 +57,7 @@ sidebar_position: 10
 Открой фаерфоксом
 
 ### Не могу получить картинку через джаву
-Полный мануал что и как можно [посмотреть тут](../../modding-and-hacks/megarac_java_console/index.md). Проверено на связке с [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt)
+Полный мануал что и как можно [посмотреть тут](../../modding-and-hacks/megarac-sp/java-console/index.md). Проверено на связке с [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt)
 
 ### BMC умер совсем и никак не получается достучаться до него
 Прошить bmc можно либо прищепкой, либо сервисной утилитой [ASPEED iRMP SOC Flash](../../tools/index.md#aspeed-irmp-soc-flash). 
