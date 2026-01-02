@@ -32,3 +32,11 @@
 .container {
   max-width: none;
 }
+
+.hidden {
+  display: none;
+}
+
+.footer {
+  display: none;
+}

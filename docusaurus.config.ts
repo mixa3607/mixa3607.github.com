@@ -42,6 +42,8 @@ const config: Config = {
         docs: {
           routeBasePath: '/',
           editUrl: 'https://github.com/mixa3607/mixa3607.github.com/edit/master',
+          sidebarPath: './sidebars.ts',
+          sidebarCollapsed: false,
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
@@ -98,7 +100,7 @@ const config: Config = {
         {
           type: 'doc',
           position: 'left',
-          docId: 'hardware/index',
+          docId: 'wiki/index',
           label: 'Docs',
         },
         {
@@ -107,6 +109,11 @@ const config: Config = {
           position: "right",
         },
       ],
+    },
+    docs: {
+      sidebar: {
+        hideable: true,
+      }
     },
     footer: {},
     prism: {
