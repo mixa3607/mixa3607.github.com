@@ -52,15 +52,33 @@ tags:
 
 [Download BMC_RD450X_Tencent_V2.21.1095_SVT.tar.gz](@storageBaseUrl@/Lenovo-RD450x/BMC/BMC_RD450X_Tencent_V2.21.1095_SVT.tar.gz)
 
+## Получение рутового шелла
+Способ был проверен на [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt), но уверен что и с другими поедет!
+
+Скачиваем [config_sh.bak](./config_sh.bak), заливаем его через `Maintenance` => `Backup/Restore Configuration`, идём по ssh на bmc и вуаля.
+```console
+$ ssh -oHostKeyAlgorithms=+ssh-dss sysadmin@192.168.1.212
+sysadmin@192.168.1.149's password: superuser
+Executing [-/bin/sh]
+
+
+BusyBox v1.13.2 (2016-12-19 15:55:17 CST) built-in shell (ash)
+Enter 'help' for a list of built-in commands.
+
+# uname -a
+Linux  2.6.28.10-ami #1 Mon Dec 19 15:59:10 CST 2016 armv5tejl unknown
+```
+Подробнее о том как это работает: [bak2shell](../../../modding-and-hacks/megarac-sp/bak2shell%20hack/index.mdx).
+
 ## Проблемы и их решение
 ### Белый экран в хроме
 Открой фаерфоксом
 
 ### Не могу получить картинку через джаву
-Полный мануал что и как можно [посмотреть тут](../../modding-and-hacks/megarac-sp/java-console/index.md). Проверено на связке с [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt)
+Полный мануал что и как можно [посмотреть тут](../../../modding-and-hacks/megarac-sp/java-console/index.md). Проверено на связке с [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt)
 
 ### BMC умер совсем и никак не получается достучаться до него
-Прошить bmc можно либо прищепкой, либо сервисной утилитой [ASPEED iRMP SOC Flash](../../tools/index.md#aspeed-irmp-soc-flash). 
+Прошить bmc можно либо прищепкой, либо сервисной утилитой [ASPEED iRMP SOC Flash](../../../tools/index.md#aspeed-irmp-soc-flash). 
 
 :::warning Бэкапьте перед прошивкой
 :::
