@@ -41,6 +41,18 @@ FW_CODEBASEVERSION=3.X
 
 Полный мануал что и как можно [посмотреть тут](/docs/wiki/hardware/modding-and-hacks/megarac-sp/java-console/index.md), отличие только в том что П1 не нужно делать. Проверено на связке с [BMC 2.02.76714](#axiomtek-ami-megarac-sp-20276714)
 
+### Что сделать что бы эта шайтан-машина сама не включалась
+
+```console
+$ # list policies
+$ ipmitool -H 192.168.1.212 -U admin -P admin chassis policy list
+Supported chassis power policy:  always-off always-on previous
+
+$ # set to "previous" state or you may select "always-off"
+$ ipmitool -H 192.168.1.212 -U admin -P admin chassis policy previous
+Set chassis power restore policy to previous
+```
+
 ## Dumps
 
 | Name                                             | SN         | MAC BMC; shared; 1; 2;                                  | About                  | Download                                                                                      |
@@ -51,6 +63,16 @@ FW_CODEBASEVERSION=3.X
 | IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin |            | F8CC6E033B9D; ; ; ;                                     | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin) |
 
 Уверенность, что нетронутый заводской BMC есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть сеть `SN: 1118199507`, маки валидыные стоят в u-boot env var секции.
+
+## Получение рутового шелла
+Скачиваем [config_sh.bak](./config_sh.bak), заливаем его через `Maintenance` => `Backup/Restore Configuration`, идём по ssh на bmc и вуаля.
+```console
+$ ssh -oHostKeyAlgorithms=+ssh-dss sysadmin@192.168.1.212
+sysadmin@192.168.1.212's password: superuser
+~ # uname -a
+Linux AMIF8CC6E033BF2 3.14.17-ami #1 Mon Aug 8 14:34:54 CST 2022 armv6l GNU/Linux
+```
+Подробнее о том как это работает: [bak2shell](/docs/wiki/hardware/modding-and-hacks/megarac-sp/bak2shell%20hack/index.mdx).
 
 ## Change BMC fan thresholds
 
