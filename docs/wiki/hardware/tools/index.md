@@ -26,6 +26,9 @@ UEFI firmware image viewer and editor. [Project github](https://github.com/LongS
 - [UEFITool_0.28.0](@storageBaseUrl@/tools/UEFITool_0.28.0)
 - [UEFITool_A72](@storageBaseUrl@/tools/UEFITool_A72)
 
+## uefi-mod-tools
+UEFI bios and BMC mod tools. [Project github](https://github.com/mixa3607/uefi-mod-tools)
+
 ## ASPEED iRMP SOC Flash
 Service tool for flash/backup ASTxxxx. [Download ASPEED-iRMP-SOC-Flash-Utility v.1.20.00](@storageBaseUrl@/tools/ASPEED-iRMP-SOC-Flash-Utility_v12000)
 ```
@@ -40,3 +43,7 @@ Service tool for flash/backup ASTxxxx. [Download ASPEED-iRMP-SOC-Flash-Utility v
 2.Usage Description:
 - See readme.txt in each compressed package
 ```
+
+Tested with:
+- AST2400
+- AST2500
