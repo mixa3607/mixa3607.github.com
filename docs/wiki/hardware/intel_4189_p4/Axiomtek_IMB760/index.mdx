@@ -5,6 +5,7 @@ tags:
   - lga4189p4
   - motherboard
 ---
+
 import CodeBlock from "@theme/CodeBlock";
 import DocCardList from "@theme/DocCardList";
 import biosdecode from "!!raw-loader!./biosdecode.txt";
@@ -45,14 +46,16 @@ Dual LGA4189 motherboard
 </details>
 
 ## Проблемы и их решения (?)
+
 - Q: Винтики для М2 больше стандартных?
-    - A: Да, используются M3 (5mm+-)
+  - A: Да, используются M3 (5mm+-)
 - Q: Тесты подсистемы памяти в AIDA64 показывают какие то странные цифры
-    - A: Бывает, используйте [intel mlc](../../tools/index.md#intel-mlc)
+  - A: Бывает, используйте [intel mlc](../../tools/index.md#intel-mlc)
 - [...BIOS](./BIOS/index.mdx#проблемы-и-их-решения-)
 - [...BMC](./BMC/index.mdx#проблемы-и-их-решения-)
 
 ## Sensors
+
 ### All sensors
 
 <details>
@@ -61,6 +64,7 @@ Dual LGA4189 motherboard
 </details>
 
 ### Sesors matching
+
 ```console title="/etc/sensors.d/imb760.conf"
 bus "i2c-0" "SMBus I801 adapter at 0780"
 
@@ -81,13 +85,64 @@ ignore fan3
 ```
 
 ## Manual fan control
-Способа крутить обороты из BMC найдено не было, все стандартные и не очень `impi raw` команды не проходят
+
+~~Способа крутить обороты из BMC найдено не было, все стандартные и не очень `impi raw` команды не проходят~~
+Способ найден, но он с ебанцой. Для начала нужно получить sh по [мануалу отсюда](../../modding-and-hacks/megarac-sp/bak2shell%20hack/index.mdx) и рулить вертушками можно так:
+
+```console
+~ # i2c-test -b 0 -s 0x28 -w -d 0x60 0xFF
+i2c_dev = /dev/i2c0
+Bytes written:   2
+60 ff
+```
+
+*Вкусно?* **Не очень.** Перерыл с идой и джемини/жпт половину бмц либ но не нашёл как это можно через `ipmi raw` протолкнуть :/
+
+<details>
+  <summary>Немного эксплейна в это от джемини</summary>
+  <CodeBlock>
+
+```
+~ # i2c-test --scan
+Scanning the I2C Bus...this may take a while...
+X
+.......X.........................X.....X......X....................X...X..............
+.........................X...............
+Done!  Found 8 valid slave address(es)
+Slave list:
+0x00
+0x10
+0x44
+0x50
+0x5e
+0x88
+0x90
+0xe0
+~ # ls /dev/i2c-*
+/dev/i2c-0  /dev/i2c-1  /dev/i2c-2  /dev/i2c-3  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6  /dev/i2c-7  /dev/i2c-8
+```
+
+Утилита `i2c-test`, судя по всему, выводит 8-битные адреса (с учетом бита чтений/записи), в то время как Linux обычно использует 7-битные.
+- **0x50** в 8-битном представлении — это **0x28** в 7-битном (`0x28 << 1 = 0x50`). Это ваш первый **NCT7802** (FAN1-3).
+- **0x5E** в 8-битном представлении — это **0x2F** в 7-битном (`0x2F << 1 = 0x5E`). Это ваш второй **NCT7802** (FAN4-6).
+
+Чип NCT7802 управляет скоростью через регистры **PWM Duty Cycle**.
+
+**Slave адреса (7-bit):** `0x28` (первый чип) и `0x2F` (второй чип).
+**Регистры PWM:** \* `0x60` — FAN1 / FAN4, `0x61` — FAN2 / FAN5, `0x62` — FAN3 / FAN6
+**Значения:** от `0x00` (стоп) до `0xFF` (100% скорость).
+
+</CodeBlock>
+</details>
 
 ### Cpu fans
+
 Если я правильно понимаю то настроить поведение вертушек на цпу можно только через меню в биосе (см. маунал)
 
 ### Sys fans
+
 Системные вертушки можно легко крутить из системы. Всё достаточно стандартно
+
 ```bash
 $ echo 1  | sudo tee /sys/class/hwmon/hwmon7/pwm2_enable  #enable FAN2 manual mode
 $ echo 50 | sudo tee /sys/class/hwmon/hwmon7/pwm2         #set FAN2 to 50 (allowed 0-255)
