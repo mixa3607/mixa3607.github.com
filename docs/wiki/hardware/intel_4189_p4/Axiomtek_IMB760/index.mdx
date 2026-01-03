@@ -51,8 +51,7 @@ Dual LGA4189 motherboard
   - A: Да, используются M3 (5mm+-)
 - Q: Тесты подсистемы памяти в AIDA64 показывают какие то странные цифры
   - A: Бывает, используйте [intel mlc](../../tools/index.md#intel-mlc)
-- [...BIOS](./BIOS/index.mdx#проблемы-и-их-решения-)
-- [...BMC](./BMC/index.mdx#проблемы-и-их-решения-)
+- ...прочие проблемы специфичны для BIOS/BMC
 
 ## Sensors
 
@@ -96,7 +95,7 @@ ignore fan3
 
 ### From BMC
 
-[Read this](./BMC/index.mdx#manual-fan-control)
+[Read this](./BMC/Megarac_SP_2.02.76714/index.mdx#manual-fan-control)
 
 ```bash
 $ echo 1  | sudo tee /sys/class/hwmon/hwmon7/pwm2_enable  #enable FAN2 manual mode

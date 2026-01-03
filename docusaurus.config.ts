@@ -77,7 +77,7 @@ const config: Config = {
       /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
       ({
         hashed: true,
-        language: ["en"],
+        language: ["en", "ru"],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
         indexBlog: false,
@@ -117,9 +117,9 @@ const config: Config = {
     },
     footer: {},
     prism: {
-      theme: prismThemes.vsLight,
-      darkTheme: prismThemes.vsDark,
-      additionalLanguages: ['csharp', 'powershell', 'yaml', 'bash'],
+      theme: prismThemes.github,
+      darkTheme: prismThemes.duotoneDark,
+      additionalLanguages: ['csharp', 'powershell', 'yaml', 'bash', 'ini'],
     },
   } satisfies Preset.ThemeConfig,
 };

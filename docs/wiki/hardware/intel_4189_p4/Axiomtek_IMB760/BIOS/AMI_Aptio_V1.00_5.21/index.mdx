@@ -1,0 +1,44 @@
+---
+title: AMI Aptio IMB760 V1.00
+sidebar_position: 20
+tags:
+  - bios
+  - lga4189p4
+  - motherboard
+---
+
+# Axiomtek AMI Aptio `V1.00 / 5.21`
+
+Стоковый BIOS из аксиомтека.
+
+```yaml
+vendor: American Megatrends International, LLC.
+version: IMB760 V1.00
+systemBiosMajorRelease: 5
+systemBiosMinorRelease: 21
+```
+
+## Docs
+
+- [Axiomtek IMB760 User's Manual VA1_06-02-2022](@storageBaseUrl@/Axiomtek-IMB760/docs/IMB760-User-Manual-VA1_06-02-2022.pdf)
+
+## Проблемы и их решения (?)
+
+- Q: UEFI не видит csm boot devices?
+  - A: Завести не удалось
+
+## Get BIOS POST codes from BMC
+
+[See BMC docs](../../BMC/Megarac_SP_2.02.76714/index.mdx#get-bios-post-codes-from-bmc)
+
+## Dumps
+
+| Name                                              | SN         | About                  | Download                                                                                        |
+| ------------------------------------------------- | ---------- | ---------------------- | ----------------------------------------------------------------------------------------------- |
+| IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin)   |
+| IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
+| IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin)  |
+| IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin       | 1118199507 | after reset            | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin)       |
+| IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin |            | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin) |
+
+Уверенность что нетронутый заводской BIOS есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть бут `SN: 1118199507`

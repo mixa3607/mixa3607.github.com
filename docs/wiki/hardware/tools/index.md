@@ -20,6 +20,13 @@ AMI BIOS edit tool:
 - [AMIBCP_5.02.0031.exe](@storageBaseUrl@/tools/AMIBCP_5.02.0031/AMIBCP_5.02.0031.exe)
 - [AMIBCP_5.02.0034.exe](@storageBaseUrl@/tools/AMIBCP_5.02.0034/AMIBCP_5.02.0034.exe)
 
+## AMI ROM Tool
+Aptio 5.x AFU (AFUEFI/AFULNX/AFUWIN/AFUDOS) flashing BIOS tool
+- AFUEFI [download](@storageBaseUrl@/tools/AMI-Firmware-Update-Utility/afu/afuefi) - uefi (самая беспроблемная штука для uefi-only систем)
+- AFUWIN [download](@storageBaseUrl@/tools/AMI-Firmware-Update-Utility/afu/afuwin) - windows (винда стабильно встаёт в позу при попытке заюзать бинарь)
+- AFUDOS [download](@storageBaseUrl@/tools/AMI-Firmware-Update-Utility/afu/afudos) - dos (под uefi-only системы не подойдёт)
+- AFULNX - linux (под древние ядра, поднять около нереально, идём мимо)
+
 ## UEFITool
 UEFI firmware image viewer and editor. [Project github](https://github.com/LongSoft/UEFITool)
 

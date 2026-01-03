@@ -7,19 +7,12 @@ tags:
   - motherboard
 ---
 
+import DocCardList from "@theme/DocCardList";
 import CodeBlock from "@theme/CodeBlock";
-import partitiontable from "!!raw-loader!./partitions-table.json";
 
 # BMC
 
 BMC на базе `AST2500` и флеша `W25Q256JVFQ`
-
-<details>
-  <summary>Screenshot</summary>
-
-![bmc web ui screenshot](./bmc-screenshot.png)
-
-</details>
 
 ## Docs
 
@@ -27,21 +20,11 @@ BMC на базе `AST2500` и флеша `W25Q256JVFQ`
 - [AST2500 Software Programming Guide](@storageBaseUrl@/Axiomtek-IMB760/docs/AST2500-Software-Programming-Guide.pdf)
 - [DEPO BMC Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BMC_DPC627-A.pdf)
 
-## Проблемы и их решения (?)
-
-### Кажется или в BMC неверные данные по температурам?
-
-Не кажется. Не смотрим на попугаи в BMC, но вольтаж и обороты вертушек там правильно показывает (с округлением до сотен)
-
-### Не могу получить картинку через джаву
-
-Полный мануал что и как можно [посмотреть тут](../../../modding-and-hacks/megarac-sp/java-console/index.md), отличие только в том что П1 не нужно делать. Проверено на связке с [BMC 2.02.76714](#axiomtek-ami-megarac-sp-20276714)
-
 ## Прошивки
 
 На данный момент известны 2 прошивки, но получить удалось только одну
 
-- Axiomtek AMI Megarac SP `Linux version 3.14.17-ami (AMI@localhost) (gcc version 4.6.1 (Sourcery CodeBench Lite 2011.09-70) ) #1 Mon Aug 8 14:34:54 CST 2022`
+- [Axiomtek AMI Megarac SP 2.02.76714](./Megarac_SP_2.02.76714/index.mdx)
 - DEPO OpenBMC
 
 Известно 2 варианта зашиться/снять дамп
@@ -52,151 +35,4 @@ BMC на базе `AST2500` и флеша `W25Q256JVFQ`
 Им можно шить, но проверьте что он у вас либо с завода на 3,3в, либо что вы его переделали. Мануалы есть в интернете к примеру https://wiki.chucknemeth.com/usb-devices/ch341a/3v-ch341a-mod
 :::
 
-### Axiomtek AMI Megarac SP 2.02.76714
-
-```ini
-FW_VERSION=2.02.76714
-FW_DATE=Aug 8 2022
-FW_BUILDTIME=14:45:58 CST
-FW_DESC=RR10 AST2500 KERN3 BUILD 2
-FW_PRODUCTID=1
-FW_RELEASEID=RR9
-FW_CODEBASEVERSION=3.X
-```
-
-#### Dumps
-
-| Name                                             | SN         | MAC BMC; shared; 1; 2;                                  | About                  | Download                                                                                      |
-| ------------------------------------------------ | ---------- | ------------------------------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------- |
-| IMB760_BMC_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | F8CC6E033B82; F8CC6E033CAE; F8CC6E033DDA; F8CC6E033F06; | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033B82_zero-boot.bin)   |
-| IMB760_BMC_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | F8CC6E033BA3; F8CC6E933CCF; F8CC6E033DFB; F8CC6E033F27; | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
-| IMB760_BMC_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | F8CC6E033BF2; F8CC6E033D1E; F8CC6E033E4A; F8CC6E033F76; | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_mixa3607_F8CC6E033BF2_configured.bin)  |
-| IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin |            | F8CC6E033B9D; ; ; ;                                     | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin) |
-
-Уверенность, что нетронутый заводской BMC есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть сеть `SN: 1118199507`, маки валидыные стоят в u-boot env var секции.
-
-## Change BMC fan thresholds
-
-```console
-$ sudo ipmitool sensor thresh FAN1 lower  0 0 0
-Locating sensor record 'FAN1'...
-Setting sensor "FAN1" Lower Non-Recoverable threshold to 0.000
-Setting sensor "FAN1" Lower Critical threshold to 0.000
-Setting sensor "FAN1" Lower Non-Critical threshold to 0.000
-
-$ # run prev command for all FANx
-$ sudo ipmitool sensor list all
-+12V             | 12.100     | Volts      | ok    | 9.600     | 10.200    | 10.800    | 13.200    | 13.800    | 14.400
-+5V              | 4.928      | Volts      | ok    | 4.510     | 4.620     | 4.752     | 5.258     | 5.368     | 5.500
-+3.3V            | 3.300      | Volts      | ok    | 2.978     | 3.051     | 3.139     | 3.460     | 3.548     | 3.635
-+5VSB            | 4.906      | Volts      | ok    | 4.510     | 4.620     | 4.752     | 5.258     | 5.368     | 5.500
-+3VSB            | 3.285      | Volts      | ok    | 2.978     | 3.051     | 3.139     | 3.460     | 3.548     | 3.635
-SYS1_TEMP        | 31.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 70.000    | 90.000    | 100.000
-CPU1_TEMP        | 37.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 100.000   | 110.000   | 120.000
-SYS2/CPU2_TEMP   | 37.000     | degrees C  | ok    | -40.000   | -30.000   | -20.000   | 100.000   | 110.000   | 120.000
-FAN1             | 1200.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN2             | 1000.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN3             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN4             | 1000.000   | RPM        | ok    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN5             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN6             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN7             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-FAN8             | 0.000      | RPM        | nr    | 0.000     | 0.000     | 0.000     | 31000.000 | 32000.000 | 33000.000
-```
-
-Как заставить материнку считать 0 оборотов нормой не нашёл, они всегда вываливаются в `non rec` mode
-
-## Get BIOS POST codes from BMC
-
-- command `0x32 0x73`
-- arg `0x00/0x01`
-  - `0x00` - current boot
-  - `0x01` - prev boot
-
-```consle
-$ ipmitool -H 192.168.1.212 -U admin -P admin raw 0x32 0x73 0x00
- a3 a3 a3 a7 a9 a7 a7 a7 a7 a9 a9 a9 a8 aa ae af
- e0 e0 e0 e1 e4 e3 e5 af b0 b0 7e cf 7e cd b0 b0
- 7e b0 c1 b1 b1 b1 7e b4 b4 b4 c2 7e b0 7e b1 b1
- b1 b1 b4 7e b4 b4 b4 b8 c5 b2 c7 b3 b3 b3 b3 b3
- b3 b3 b3 b3 b6 b6 b6 b7 b6 b6 b6 b6 b7 b7 b7 b7
- b7 7e b0 be 7e 7e b0 d6 7e b4 b4 b4 c7 c7 b7 b7
- b7 b7 b7 b7 b7 b7 b7 b7 b8 b8 b8 b8 b8 b8 b8 b8
- b8 c9 ba b9 cb 7e bb bb bb bb bb bb bb bb bb bb
- bb bb bb 7e 7e d0 7e d0 d0 7e d0 7e d1 7e d1 7e
- ca ca b7 d3 7e cc bc bc bc bc bc bc bc bc bc ce
- bf af e6 e7 e9 eb ec ed ee 4f 33 60 61 9a 68 70
- 79 90 91 92 94 94 94 94 94 94 94 94 94 94 ef 92
- 92 92 92 92 92 92 92 92 99 44 45 91 92 92 92 92
- 92 92 92 92 92 92 97 b2 98 99 9d 9a 9c 92 a0 a2
- a2 a0 a2 a2 a2 a2 a2 a2 a2 a2 a0 a0 99 92 92 92
- 92 92 92 92 92 92 ad af b1 b1 84 ee aa e3 e3 e3
-$ ipmitool -H 192.168.1.212 -U admin -P admin raw 0x32 0x73 0x01
- 19 11 32 31 a1 a3 a3 a3 a3 a3 a3 a7 a9 aa a9 ab
- ab ab af e0 e0 b0 b5 b0 7e cf 7e cd b0 b0 7e b0
- c1 b1 b1 b1 7e b4 b4 b4 c2 7e b0 7e b1 af af
-```
-
-## Manual fan control
-
-~~Способа крутить обороты из BMC найдено не было, все стандартные и не очень `impi raw` команды не проходят~~
-Способ найден, но он с ебанцой. Для начала нужно получить sh по [мануалу отсюда](../../../modding-and-hacks/megarac-sp/bak2shell%20hack/index.mdx) и рулить вертушками можно так:
-
-```console
-~ # i2c-test -b 0 -s 0x28 -w -d 0x60 0xFF
-i2c_dev = /dev/i2c0
-Bytes written:   2
-60 ff
-```
-
-_Вкусно?_ **Не очень.** Перерыл с идой и джемини/жпт половину бмц либ но не нашёл как это можно через `ipmi raw` протолкнуть :/
-
-<details>
-  <summary>Немного эксплейна в это от джемини</summary>
-  <CodeBlock>
-
-```
-~ # i2c-test --scan
-Scanning the I2C Bus...this may take a while...
-X
-.......X.........................X.....X......X....................X...X..............
-.........................X...............
-Done!  Found 8 valid slave address(es)
-Slave list:
-0x00
-0x10
-0x44
-0x50
-0x5e
-0x88
-0x90
-0xe0
-~ # ls /dev/i2c-*
-/dev/i2c-0  /dev/i2c-1  /dev/i2c-2  /dev/i2c-3  /dev/i2c-4  /dev/i2c-5  /dev/i2c-6  /dev/i2c-7  /dev/i2c-8
-```
-
-Утилита `i2c-test`, судя по всему, выводит 8-битные адреса (с учетом бита чтений/записи), в то время как Linux обычно использует 7-битные.
-
-- **0x50** в 8-битном представлении — это **0x28** в 7-битном (`0x28 << 1 = 0x50`). Это ваш первый **NCT7802** (FAN1-3).
-- **0x5E** в 8-битном представлении — это **0x2F** в 7-битном (`0x2F << 1 = 0x5E`). Это ваш второй **NCT7802** (FAN4-6).
-
-Чип NCT7802 управляет скоростью через регистры **PWM Duty Cycle**.
-
-**Slave адреса (7-bit):** `0x28` (первый чип) и `0x2F` (второй чип).
-**Регистры PWM:** \* `0x60` — FAN1 / FAN4, `0x61` — FAN2 / FAN5, `0x62` — FAN3 / FAN6
-**Значения:** от `0x00` (стоп) до `0xFF` (100% скорость).
-
-</CodeBlock>
-</details>
-
-### BMC modding / MAC restore
-
-:::warning 🚧Under construction🚧
-:::
-
-<details>
-  <summary>`partitions table`</summary>
-  <CodeBlock language="json" title="partitions-table.json">
-    {partitiontable}
-  </CodeBlock>
-</details>
+<DocCardList />
