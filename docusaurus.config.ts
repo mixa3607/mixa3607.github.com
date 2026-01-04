@@ -33,6 +33,14 @@ const config: Config = {
   future: {
     v4: true,
   },
+  plugins: [
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        
+      }
+    ]
+  ],
 
   presets: [
     [
