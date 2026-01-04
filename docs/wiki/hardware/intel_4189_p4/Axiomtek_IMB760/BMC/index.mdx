@@ -9,6 +9,7 @@ tags:
 
 import DocCardList from "@theme/DocCardList";
 import CodeBlock from "@theme/CodeBlock";
+import Ch341aWarning from "/docs/wiki/hardware/_snippets/ch341a-warning.mdx";
 
 # BMC
 
@@ -27,13 +28,11 @@ BMC на базе `AST2500` и флеша `W25Q256JVFQ`
 - [Axiomtek AMI Megarac SP 2.02.76714](./Megarac_SP_2.02.76714/index.mdx)
 - DEPO OpenBMC
 
-Известно 2 варианта зашиться/снять дамп
+Известно 2 варианта зашиться/снять дамп:
 
 - Хардверно прищепкой (можно не выпаивать)
 - Софтверно [ASPEED iRMP SOC Flash](../../../tools/index.md#aspeed-irmp-soc-flash)
 
-:::warning danger "CH341"
-Им можно шить, но проверьте что он у вас либо с завода на 3,3в, либо что вы его переделали. Мануалы есть в интернете к примеру https://wiki.chucknemeth.com/usb-devices/ch341a/3v-ch341a-mod
-:::
+<Ch341aWarning />
 
 <DocCardList />

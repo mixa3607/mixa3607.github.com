@@ -9,6 +9,7 @@ tags:
 
 import DocCardList from "@theme/DocCardList";
 import CodeBlock from "@theme/CodeBlock";
+import Ch341aWarning from "/docs/wiki/hardware/_snippets/ch341a-warning.mdx";
 
 # BIOS
 
@@ -28,11 +29,10 @@ BIOS на базе `AMI Aptio` и флеша `W25Q256JVFQ`
 - DEPO AMI Aptio `1.0`
 
 Известно 2 варианта зашиться/снять дамп:
-* Хардверно прищепкой (можно не выпаивать)
-* Софтверно [AMI ROM Tool - AfuEfi](../../../tools/index.md#ami-rom-tool) ![alt text](image.png)
 
-:::warning danger "CH341"
-Им можно шить, но проверьте что он у вас либо с завода на 3,3в, либо что вы его переделали. Мануалы есть в интернете к примеру https://wiki.chucknemeth.com/usb-devices/ch341a/3v-ch341a-mod
-:::
+- Хардверно прищепкой (можно не выпаивать)
+- Софтверно [AMI ROM Tool - AfuEfi](../../../tools/index.md#ami-rom-tool) ![alt text](image.png)
+
+<Ch341aWarning />
 
 <DocCardList />
