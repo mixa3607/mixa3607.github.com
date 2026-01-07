@@ -17,7 +17,7 @@ import Ch341aWarning from "/docs/wiki/hardware/_snippets/ch341a-warning.mdx";
 Почему они вообще могут слететь? Самое просто и распространённое BMC словил белочку и его реанимировали через зашитие заводского образа без подмены UBoot env блока.
 
 ## Где и как хранятся MAC'и
-В общем случае Megarac SP это просто linux дистр на базе немного переделанного UBoot. MAC адреса хранятся а секции env переменных загрузчика где то после него самого. Что где и как лежит в образе можно почитать в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index)
+В общем случае Megarac SP это просто linux дистр на базе немного переделанного UBoot. MAC адреса хранятся а секции env переменных загрузчика где то после него самого. Что где и как лежит в образе можно почитать в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index.mdx)
 
 ## 0. Перед любыми действиями снимайте дампы!
 Самое простое через `lxflash` 
@@ -141,9 +141,9 @@ sudo ./socflash.sh of=backup_rd450x_s2_stage0.bin
 </Tabs>
 
 #### Находим UBoot env секцию
-О всех вариантах поиска этой страницы есть в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index). В данном гайде подём по наивному пути с сканом дампа.
+О всех вариантах поиска этой страницы есть в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index.mdx). В данном гайде подём по наивному пути с сканом дампа.
 
-Ставим `uefi-mod-tools` по [гайду](/docs/wiki/hardware/tools/uefi-mod-tools/index#install)
+Ставим `uefi-mod-tools` по [гайду](/docs/wiki/hardware/tools/uefi-mod-tools/index.mdx#install)
 
 Сканим дамп, извлекаем блок:
 ```shell title="~/uefi-mod-tools"

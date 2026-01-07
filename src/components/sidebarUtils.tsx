@@ -10,7 +10,6 @@ export const useCurrentSidebarSiblingsContainsName = (name: string): PropSidebar
 export const useCurrentSidebarContainsName = (name: string): PropSidebarItem[] => {
     const allItems: PropSidebarItem[] = [];
     useDocsSidebar().items.forEach(x => collectAllSidebarItems(x, allItems));
-    console.log(allItems);
     return allItems.filter(x => (x as PropSidebarItemLink)?.docId?.includes(name));
 }
 
