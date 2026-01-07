@@ -1,5 +1,65 @@
 {
   "partitions": [
-    
+    {
+      // uboot
+      "fileName": "10-boot.bin",
+      "beginAddress": "0x00000000",
+      "endAddress": "0x0002F198"
+    },
+    {
+      // uboot env
+      "fileName": "11-boot-env.bin",
+      "beginAddress": "0x00030000",
+      "endAddress": "0x00040000",
+    },
+    {
+      // mount as '/conf' (jffs2)
+      "fileName": "20-conf.bin",
+      "beginAddress": "0x00050000",
+      "endAddress": "0x000C0000"
+    },
+    {
+      // mount as '/bkupconf' (jffs2)
+      "fileName": "30-conf.bin",
+      "beginAddress": "0x000D0000",
+      "endAddress": "0x00140000"
+    },
+    {
+      // mount as '/' (uimage ramdisk)
+      "fileName": "40-root-header.bin",
+      "beginAddress": "0x00150000",
+      "endAddress": "0x01252040"
+    },
+    // Откуда инфо что это uimage header + cramfs? Это заметка от меня из будущего который уже посмотрел внутрь через binwalk
+    {
+      // mount as '/' (uimage header)
+      "fileName": "41-root-header.bin",
+      "beginAddress": "0x00150000",
+      "endAddress": "0x00150040"
+    },
+    {
+      // mount as '/' (uimage content (cramfs))
+      "fileName": "42-root-content.bin",
+      "beginAddress": "0x00150040",
+      "endAddress": "0x01252040"
+    },
+    {
+      // kernel (uimage)
+      "fileName": "50-osimage.bin",
+      "beginAddress": "0x01260040",
+      "endAddress": "0x0143A02C"
+    },
+    {
+      // mount as '/usr/local/www' (cramfs)
+      "fileName": "60-www.bin",
+      "beginAddress": "0x01450000",
+      "endAddress": "0x01670000"
+    },
+    {
+      // build info (string)
+      "fileName": "70-ast2400e.bin",
+      "beginAddress": "0x01FF0040",
+      "endAddress": "0x01FF00B4"
+    }
   ]
 }

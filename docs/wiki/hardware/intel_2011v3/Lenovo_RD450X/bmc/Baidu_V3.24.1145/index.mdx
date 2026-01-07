@@ -41,13 +41,21 @@ Features:
 
 Открой фаерфоксом
 
+### Какой логин/пасс?
+
+По умолчанию `ADMIN:ADMIN` (именно капсом)
+
 ### Не могу получить картинку через джаву
 
 Полный мануал что и как можно [посмотреть тут](/docs/wiki/hardware/modding-and-hacks/megarac-sp/java-console/index.md)
 
+### Если вставляю в dedicated порт кабель, то bmc не стартует
+
+Скорее всего физически умер порт даже если радостно мигает светодиодами. Используйте только shared порт или из системы через `ipmi_si`.
+
 ### BMC умер совсем и никак не получается достучаться до него
 
-Прошить bmc можно либо прищепкой, либо сервисной утилитой [ASPEED iRMP SOC Flash](/docs/wiki/hardware/tools/index.md#aspeed-irmp-soc-flash).
+Прошить bmc можно либо прищепкой, либо сервисной утилитой [ASPEED iRMP SOC Flash](/docs/wiki/hardware/tools/index#aspeed-irmp-soc-flash).
 
 :::warning Бэкапьте перед прошивкой
 :::
@@ -58,7 +66,7 @@ Features:
 
 ## Получение рутового шелла
 
-Способ был проверен на [BMC 3.24.1145](#bmc_rd450x_mlk_baidu_v3241145_svt), но уверен что и с другими поедет!
+Способ был проверен на этой версии, но уверен что и с другими поедет!
 
 Скачиваем [config_sh.bak](./config_sh.bak), заливаем его через `Maintenance` => `Backup/Restore Configuration`, идём по ssh на bmc и вуаля.
 
@@ -114,46 +122,18 @@ public async Task SetFanSpeedAsync(LenovoIpmiFanType fan, int percentage)
 }
 ```
 
-## BMC modding / MAC restore
+## Networking
 
-После прошивки нужно восстановить MACи. Восстановление по мануалу из [overclockers post](https://forums.overclockers.ru/viewtopic.php?p=18321593#p18321593)
+| ipmi channel | purpose | mac label | UBoot IF |
+| ------- | ------- | --------- | -------- |
+| 1       | shared     | верхняя наклейка `IPMI: XX:XX:XX:XX:XX:XX` | ethaddr  |
+| 8       | dedicated  | нижняя наклейка  `IPMI: XX:XX:XX:XX:XX:XX` | eth1addr |
 
-```shell
-# channel 1 это shared c mac 6c:0b:84:d7:09:cd
-sudo ipmitool raw 0x0c 0x01 1 0xc2 0x00
-sudo ipmitool lan set 0x01 macaddr 6c:0b:84:d7:09:cd
-sudo ipmitool lan set 1 vlan id off
-sudo ipmitool mc reset cold
-```
+### MAC repair
 
-При попытке восстановить оба мака бмц у меня всегда уходил в себя и помогала только перешивка с 0, но можете погуглить этот бред
+После прошивки не из web ui нужно восстановить MAC'и. На данный момент получилось это сделать простым способом [через ipmitools (вариант с 1 MAC'ом)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index#a-самый-простой-через-ipmitools-вариант-с-1-macом) и более муторным [с изменением UBoot env (все MAC'и)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index#c-напрямую-редактируем-uboot-env-все-macи).
 
-```shell
-ipmitool lan print 1
-ipmitool lan set 0x01 access on
-ipmitool raw 0x0c 0x01 0x01 0xc2 0x00
-ipmitool lan set 0x01 macaddr 6c:0b:84:d7:09:ce
-ipmitool lan set 1 vlan id off
-
-ipmitool lan print 8
-ipmitool lan set 0x08 access on
-ipmitool raw 0x0c 0x01 0x01 0xc2 0x01
-ipmitool lan set 0x08 macaddr 6c:0b:84:d7:09:ce
-
-ipmitool mc reset cold
-
-
-sudo ipmitool raw 0x0c 0x01 1 0xc2 0x00
-sudo ipmitool lan set 0x01 macaddr 6c:0b:84:d7:09:cd
-sudo ipmitool lan set 1 vlan id off
-sudo ipmitool mc reset cold
-
-sudo ipmitool raw 0x0c 0x01 8 0xc2 0x00
-sudo ipmitool lan set 8 macaddr 6c:0b:84:d7:09:cd
-sudo ipmitool mc reset cold
-```
-
-<UnderConstructionWarning />
+## Разметка флеша
 
 <details>
   <summary>`partitions table`</summary>

@@ -1,0 +1,48 @@
+---
+title: ASPEED iRMP SOC Flash
+sidebar_position: 10
+---
+
+# ASPEED iRMP SOC Flash
+
+Service tool for flash/backup ASTxxxx.
+
+```
+; ASPEED iRMP SOC Flash Package Description
+;===============================================================================
+1.Package Description:
+- socflash.zip: for DOS Execution Environment
+- winflash.zip: for Windows Execution Environment
+- lxflash.tar.gz: for x86/x64 Linux Execution Environment
+- bsdflash.tar.gz: for FreeBSD Execution Environment
+- uflash_x64.zip: for x64 UEFI Shell Execution Environment
+2.Usage Description:
+- See readme.txt in each compressed package
+```
+
+Tested with:
+
+- AST2400
+- AST2500
+
+## Download
+
+- [Download v.1.20.00](@storageBaseUrl@/tools/ASPEED-iRMP-SOC-Flash-Utility_v12000)
+
+## Install
+
+```console
+$ mkdir lxflash
+$ cd lxflash
+$ wget @storageBaseUrl@/tools/ASPEED-iRMP-SOC-Flash-Utility_v12000/lxflash_v12000.tar.gz
+2026-01-04 22:48:51 (315 MB/s) - ‘lxflash_v12000.tar.gz’ saved [135294/135294]
+$ tar -xvf lxflash_v12000.tar.gz
+boot.bin
+readme.txt
+release.txt
+socflash
+socflash_elom.sh
+socflash_s58.sh
+socflash.sh
+socflash_x64
+```

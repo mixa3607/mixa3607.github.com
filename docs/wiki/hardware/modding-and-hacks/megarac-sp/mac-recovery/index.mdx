@@ -1,0 +1,276 @@
+---
+title: MACs recovery
+sidebar_position: 30
+tags:
+  - ami
+  - bmc
+  - megarac-sp
+---
+
+import DocCardList from "@theme/DocCardList";
+import {useCurrentSidebarContainsName} from '@site/src/components/sidebarUtils.tsx';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import Ch341aWarning from "/docs/wiki/hardware/_snippets/ch341a-warning.mdx";
+
+# Восстановление MAC адресов у BMC
+Почему они вообще могут слететь? Самое просто и распространённое BMC словил белочку и его реанимировали через зашитие заводского образа без подмены UBoot env блока.
+
+## Где и как хранятся MAC'и
+В общем случае Megarac SP это просто linux дистр на базе немного переделанного UBoot. MAC адреса хранятся а секции env переменных загрузчика где то после него самого. Что где и как лежит в образе можно почитать в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index)
+
+## 0. Перед любыми действиями снимайте дампы!
+Самое простое через `lxflash` 
+
+<DocCardList items={useCurrentSidebarContainsName("ASPEED-iRMP-SOC-Flash-Utility")} />
+
+```console title="server host OS"
+$ sudo ./socflash.sh of=backup_stage0.bin
+ASPEED SOC Flash Utility v.1.20.00
+Warning:
+SoCflash utility is only for engineers to update the firmware in lab,
+it is not a commercialized software product,
+ASPEED has not done compatibility/reliability stress test for SoCflash.
+Please do not use this utility for any mass production purpose.
+Press y to continue if you are agree ....
+y
+Find ASPEED Device 1a03:2000 on 5:0.0
+MMIO Virtual Address: c9dd1000
+Relocate IO Base: 5000
+Found ASPEED Device 1a03:2400 rev. 30
+Static Memory Controller Information:
+CS0 Flash Type is SPI
+CS1 Flash Type is SPI
+CS2 Flash Type is NOR
+CS3 Flash Type is NOR
+CS4 Flash Type is NOR
+Boot CS is 0
+Option Information:
+CS: 0
+Flash Type: SPI
+[Warning] Don't AC OFF or Reboot System During BMC Firmware Update!!
+[SOCFLASH] Flash ID : 1920c2
+Find Flash Chip #1: MXIC MX25L256/257
+Backup Flash Chip O.K.
+```
+
+Это простое действие позволит выйти даже из самой сложной ситуации, пусть и ценой покупки программатора
+
+## A. Самый простой через ipmitools (вариант с 1 MAC'ом)
+
+#### Pros:
+- Требует только что бы BIOS прокидывал ipmi в систему и рабочего дистра
+
+#### Cons:
+- Сработает или нет зависит от вендора и фазы луны
+- Позволяет восстановить только ОДИН mac
+
+```shell title="server host OS"
+CHANNEL=1
+sudo ipmitool lan print $CHANNEL
+sudo ipmitool raw 0x0c 0x01 $CHANNEL 0xc2 0x00
+sudo ipmitool lan set $CHANNEL macaddr de:ad:be:ee:ee:ef
+sudo ipmitool lan set $CHANNEL vlan id off
+sudo ipmitool mc reset cold
+```
+
+Какой канал что означает зависит от прошивки BMC. Без рабочей платы не понятно где dedicated, а где shared port
+
+Источники:
+- https://forums.overclockers.ru/viewtopic.php?p=18321593#p18321593
+- https://computercheese.blogspot.com/2013/05/ipmi-lan-commands.html
+
+## B. Простой через ipmitools с шансом кирпича (вариант с 2 MAC'ами)
+
+#### Pros:
+- Требует только что бы BIOS прокидывал ipmi в систему и рабочего дистра
+- Позволяет восстановить оба MAC
+
+#### Cons:
+- Сработает или нет зависит от вендора, фазы луны и вашей удачи
+- Шанс бутлупа BMC который можно решить только восстановлением из бэкапа/зашивкой нульцевого бинаря
+
+```shell title="server host OS"
+# set dedicated port mac
+CHANNEL=1
+sudo ipmitool lan print $CHANNEL
+sudo ipmitool lan set $CHANNEL access on
+sudo ipmitool raw 0x0c 0x01 $CHANNEL 0xc2 0x00
+sudo ipmitool lan set $CHANNEL macaddr de:ad:be:ee:ef:01
+sudo ipmitool lan set $CHANNEL vlan id off
+# set shared port mac
+CHANNEL=8
+sudo ipmitool lan print $CHANNEL
+sudo ipmitool lan set $CHANNEL access on
+sudo ipmitool raw 0x0c 0x01 $CHANNEL 0xc2 0x00
+sudo ipmitool lan set $CHANNEL macaddr de:ad:be:ee:ef:08
+sudo ipmitool lan set $CHANNEL vlan id off
+# reset
+sudo ipmitool mc reset cold
+```
+
+Какой канал что означает зависит от прошивки BMC. Без рабочей платы не понятно где dedicated, а где shared port. После ресета BMC может уйти в бутлуп при этом система не офается, рекомендую СРАЗУ зашивать бэкап из пункта 0 или пустой BMC
+
+Источники:
+- https://forum.ixbt.com/topic.cgi?id=9:68849:8#8
+
+## C. Напрямую редактируем UBoot env (все MAC'и)
+
+Задумка в том что бы сдампить прошивку, отредактировать UBoot env сектор и зашить обратно
+
+#### Pros:
+- Не требует рабочей ОС (можно обойтись программатором)
+- Позволяет восстановить оба MAC
+- Сработает почти в 100% случаем
+
+#### Cons:
+- Шанс бутлупа BMC который можно решить только восстановлением из бэкапа/зашивкой нульцевого бинаря
+- Больше шагов/сложнее в реализации
+
+#### Снимаем дамп
+<Tabs>
+  <TabItem value="У меня есть доступ к OS на хосте" default>
+```console title="~/lxflash"
+sudo ./socflash.sh of=backup_rd450x_s2_stage0.bin
+```
+  </TabItem>
+  <TabItem value="Хост ОС не бутается">
+    Снимаем прищепкой или выпаиваем и в программатор
+    <Ch341aWarning/>
+  </TabItem>
+</Tabs>
+
+#### Находим UBoot env секцию
+О всех вариантах поиска этой страницы есть в [Deep dive into Megarac SP image](../deep-dive-into-fmh/index). В данном гайде подём по наивному пути с сканом дампа.
+
+Ставим `uefi-mod-tools` по [гайду](/docs/wiki/hardware/tools/uefi-mod-tools/index#install)
+
+Сканим дамп, извлекаем блок:
+```shell title="~/uefi-mod-tools"
+$ cp ../lxflash/backup_rd450x_s2_stage0.bin ./backup_rd450x_s2.bin
+# Сканим дамп
+$ ./uefi-mod-tools uboot env-scan -i ./backup_rd450x_s2_stage0.bin -o -
+[23:25:01 INF] Reading data from ./backup_rd450x_s2_stage0.bin
+[23:25:02 INF] CRC32 hash matched
+[23:25:02 INF] Read 15 pairs
+[23:25:02 INF] Found potential env section in page 0x00030000-0x00040000
+[23:25:02 INF] Writing output to console
+{
+  "foundEnvPages": [
+    {
+      "variables": {
+        "bootcmd": "bootfmh",
+        "bootdelay": "3",
+        "baudrate": "0x9600",
+        "loads_echo": "1",
+        "ethaddr": "00:00:00:00:00:00",
+        "eth1addr": "00:00:00:00:00:00",
+        "autoload": "no",
+        "bootselector": "1",
+        "recentlyprogfw": "1",
+        "do_memtest": "0",
+        "memtest_pass": "idle",
+        "stdin": "serial",
+        "stdout": "serial",
+        "stderr": "serial",
+        "ethact": "ast_eth0"
+      },
+      "beginAddress": "0x00030000",
+      "endAddress": "0x00040000"
+    }
+  ]
+}
+# Пишем файл разметки
+$ echo '
+{
+  "partitions": [
+    {
+      // uboot env
+      "fileName": "11-boot-env.bin",
+      "beginAddress": "0x00030000",
+      "endAddress": "0x00040000",
+    }
+  ]
+}' > partitions.json
+# Извлекаем блоки
+$ ./uefi-mod-tools bin split -i ./backup_rd450x_s2.bin -t ./partitions.json -o ./backup_rd450x_s2
+[23:45:26 INF] Reading data from ./backup_rd450x_s2.bin
+[23:45:26 INF] Reading data from ./partitions.json
+[23:45:26 INF] Saving ./backup_rd450x_s2/11-boot-env.bin
+[23:45:26 INF] Writing output to ./backup_rd450x_s2/11-boot-env.bin
+# Преобразуем uboot env в json
+$ ./uefi-mod-tools uboot env-read -i ./backup_rd450x_s2/11-boot-env.bin -o ./backup_rd450x_s2/11-boot-env.json
+[23:47:52 INF] Reading data from ./backup_rd450x_s2/11-boot-env.bin
+[23:47:52 INF] CRC32 hash matched
+[23:47:52 INF] Read 15 pairs
+[23:47:52 INF] Writing output to ./backup_rd450x_s2/11-boot-env.json
+```
+
+Как правило у досок MAC'и присваиваются как:
+- доска с двумя портами:
+  - `ethaddr` - shared MAC
+  - `eth1addr` - dedicated MAC
+- доска с одним портом:
+  - `ethaddr` и `eth1addr` - единственный MAC
+
+То есть на доске использующейся в примере нужно привести `./backup_rd450x_s2/11-boot-env.json` к виду:
+```json title="./backup_rd450x_s2/11-boot-env.json"
+{
+  "size": 65536,
+  "paddingSize": 4,
+  "hash": 1817084383,
+  "hashMatched": true,
+  "variables": {
+    "bootcmd": "bootfmh",
+    "bootdelay": "3",
+    "baudrate": "0x9600",
+    "loads_echo": "1",
+    "ethaddr": "6c:0b:84:d7:09:cd",  // change to shared
+    "eth1addr": "6c:0b:84:d7:09:ce", // change to dedicated
+    "autoload": "no",
+    "bootselector": "1",
+    "recentlyprogfw": "1",
+    "do_memtest": "0",
+    "memtest_pass": "idle",
+    "stdin": "serial",
+    "stdout": "serial",
+    "stderr": "serial",
+    "ethact": "ast_eth0"
+  }
+}
+```
+
+Далее преобразуем json в uboot env, вставляем его в дамп, зашиваем дамп:
+```shell title="~/uefi-mod-tools"
+# json to uboot env
+./uefi-mod-tools uboot env-write -o ./backup_rd450x_s2/11-boot-env.bin -i ./backup_rd450x_s2/11-boot-env.json
+[23:56:22 INF] Reading data from ./backup_rd450x_s2/11-boot-env.json
+[23:56:22 INF] Write 15 pairs
+[23:56:22 INF] Writing output to ./backup_rd450x_s2/11-boot-env.bin
+# Overwrite sections in dump
+$ ./uefi-mod-tools bin combine -i ./backup_rd450x_s2.bin -t ./partitions.json -p ./backup_rd450x_s2 -o ./backup_rd450x_s2.fix.bin
+[23:58:02 INF] Reading data from ./backup_rd450x_s2.bin
+[23:58:02 INF] Reading data from ./partitions.json
+[23:58:02 INF] Injecting ./backup_rd450x_s2/11-boot-env.bin
+[23:58:02 INF] Reading data from ./backup_rd450x_s2/11-boot-env.bin
+[23:58:02 INF] Saving ./backup_rd450x_s2.fix.bin
+[23:58:02 INF] Writing output to ./backup_rd450x_s2.fix.bin
+# Flash modded dump
+$ cd ../lxflash/ && sudo ./socflash.sh if=../uefi-mod-tools/backup_rd450x_s2.fix.bin
+```
+
+:::note "Factory firmware update"
+Если у вас есть образ от производителя, то лучше встроить в него что бы получилась заводская прошивка без хвостов
+:::
+
+После всех этих действий на оба интерфейса должны встать нормальные MAC'и
+```shell
+$ sudo ipmitool lan print 1
+...
+MAC Address             : 6c:0b:84:d7:09:cd
+...
+$ sudo ipmitool lan print 8
+...
+MAC Address             : 6c:0b:84:d7:09:ce
+...
+```

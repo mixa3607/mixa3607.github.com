@@ -35,9 +35,19 @@ const config: Config = {
   },
   plugins: [
     [
+      "docusaurus-plugin-remote-content",
+      {
+        name: "content",
+        sourceBaseUrl: "https://github.com/mixa3607/uefi-mod-tools/raw/refs/tags/v1.1.0/",
+        outDir: "docs/wiki/hardware/tools/uefi-mod-tools",
+        documents: ["readme.md"], 
+        modifyContent: (filename: string, content: string) => ({ filename: "_" + filename, content })
+      },
+    ],
+    [
       "@docusaurus/plugin-client-redirects",
       {
-        
+
       }
     ]
   ],

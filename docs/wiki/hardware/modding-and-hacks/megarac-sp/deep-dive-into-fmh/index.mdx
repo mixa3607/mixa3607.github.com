@@ -10,6 +10,7 @@ tags:
 import UnderConstructionWarning from "/docs/wiki/_snippets/under-construction-warning.mdx";
 import CodeBlock from "@theme/CodeBlock";
 import DocCardList from "@theme/DocCardList";
+import {useCurrentSidebarContainsName} from '@site/src/components/sidebarUtils.tsx';
 
 # Deep dive into Megarac SP image
 
@@ -84,13 +85,13 @@ classDiagram
 
 Инфомацию можно собрать из:
 
-- `dmesg` / `/proc/mtd` - разметка (дублирует в большей части данные из FMH)
+- `dmesg` - разметка (дублирует в большей части данные из FMH)
 - `/sys/class/mtd/mtd*/erasesize` - узнать `erasesize`
 - `/proc/sys/ractrends/Helper/*` - узнать адрес где лежат `uboot env`
 
-#### `/proc/mtd`
+#### `dmesg`
 
-В `/proc/mtd` лежит разметка флешки на блоки и обычно дублирует то что можно и так достать из FMH
+В `dmesg` ядра лежит разметка флешки на блоки и обычно дублирует то что можно и так достать из FMH
 
 #### `/proc/sys/ractrends/Helper/*`
 
@@ -104,7 +105,7 @@ classDiagram
 
 ## Practice
 
-Пришло время на практике раздербанить дамп на кусочки. Повсеместно будет использован самописный комбайн [uefi-mod-tools](/docs/wiki/hardware/tools/index.md#uefi-mod-tools). Все операции производятся в linux.
+Пришло время на практике раздербанить дамп на кусочки. Повсеместно будет использован самописный комбайн [uefi-mod-tools](/docs/wiki/hardware/tools/index#uefi-mod-tools). Все операции производятся в linux.
 
 По ходу дела наша задача собрать `partitions.json` в формате:
 
@@ -124,25 +125,11 @@ classDiagram
 
 ### Снимаем дамп
 
-Дамп можно снять прищёпкой, софтверно через [lxflash (ASPEED iRMP SOC Flash)](/docs/wiki/hardware/tools/index.md#aspeed-irmp-soc-flash), как то софтверно через `flasher` из sh BMC (на практике не делалось).
+Дамп можно снять прищёпкой, софтверно через lxflash (ASPEED iRMP SOC Flash), как то софтверно через `flasher` из sh BMC (на практике не делалось).
+
+<DocCardList items={useCurrentSidebarContainsName("ASPEED-iRMP-SOC-Flash-Utility")} />
 
 ```console title="server host OS"
-$ ############ Prepare
-$ mkdir lxflash
-$ cd lxflash
-$ wget @storageBaseUrl@/tools/ASPEED-iRMP-SOC-Flash-Utility_v12000/lxflash_v12000.tar.gz
-2026-01-04 22:48:51 (315 MB/s) - ‘lxflash_v12000.tar.gz’ saved [135294/135294]
-$ tar -xvf lxflash_v12000.tar.gz
-boot.bin
-readme.txt
-release.txt
-socflash
-socflash_elom.sh
-socflash_s58.sh
-socflash.sh
-socflash_x64
-
-$ ############ Dump
 $ sudo ./socflash.sh of=backup_rd450x_pve2_04-01-26.bin
 ASPEED SOC Flash Utility v.1.20.00
 Warning:

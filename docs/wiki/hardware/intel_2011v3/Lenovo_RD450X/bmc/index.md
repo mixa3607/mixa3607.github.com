@@ -16,7 +16,7 @@ import Ch341aWarning from "/docs/wiki/hardware/_snippets/ch341a-warning.mdx";
 Известно 3 варианта зашиться/снять дамп:
 
 - Хардверно выпаивая микруху памяти (прищепка не проверялась)
-- Софтверно [ASPEED iRMP SOC Flash](../../../tools/index.md#aspeed-irmp-soc-flash)
+- Софтверно [ASPEED iRMP SOC Flash](../../../tools/index#aspeed-irmp-soc-flash)
 - Софтверно из BMC web ui
 
 <Ch341aWarning/>
