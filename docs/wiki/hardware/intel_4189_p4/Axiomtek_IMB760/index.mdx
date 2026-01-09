@@ -16,9 +16,19 @@ import sensors from "!!raw-loader!./sensors.txt";
 
 Dual LGA4189 motherboard
 
-На самом деле речь не о ней напрямую, но о [Плата системная DPC627A, ДАЦН.469535.031](https://gisp.gov.ru/goods/#/product/3700848) что по факту и есть тот самый аксиомтек. Даже на заставке биоса написано `IMB760`. **У DEPO есть нормальные BMC и BIOS, но они их не дают**
+На самом деле речь не о ней напрямую, но о [Плата системная DPC627A, ДАЦН.469535.031](https://gisp.gov.ru/goods/#/product/3700848) что по факту и есть тот самый аксиомтек. Даже на заставке биоса написано `IMB760`. **У DEPO есть нормальные BMC и BIOS, но они их не дают всяким проходимцам**.
 
 ![](./image.png)
+
+> ДАЦН dpc627 не прошёл проверку фкэкср, основная закупка была произведена в третьем квартале 2023 года, в результате проверки были выявлены многоуровневые бэкдоры, вероятность последующего выхода из строя и блокировка оборудования критическая
+>
+> \- из одного из чатов
+> 
+> \* фкэкср - думаю речь о ФСТЭК
+
+:::warning Не рабочая сеть BMC
+Есть личная неутешительная статистика что у 2х из 3х плат были слетевшие MAC'и которые пришлось восстанавливать. Подробнее в [Megarac SP 2.02.76714 => MAC repair](./BMC/Megarac_SP_2.02.76714/index.mdx#mac-repair). Но есть и хорошая новость - все платы удалось починить
+:::
 
 ## Docs
 
@@ -51,6 +61,8 @@ Dual LGA4189 motherboard
   - A: Да, используются M3 (5mm+-)
 - Q: Тесты подсистемы памяти в AIDA64 показывают какие то странные цифры
   - A: Бывает, используйте [intel mlc](/docs/wiki/hardware/tools/index.mdx#intel-mlc)
+- Q: В мод биосе есть разблокированный пункт с типом RAM RDIMM/UDIMM. Он работает?
+  - A: Плату с UDIMM завести не удалось, шуршит вентиляторами, старта нет
 - ...прочие проблемы специфичны для BIOS/BMC
 
 ## Sensors
@@ -93,13 +105,13 @@ ignore fan3
 
 Системные вертушки можно легко крутить из системы. Всё достаточно стандартно
 
+```bash
+$ echo 1  | sudo tee /sys/class/hwmon/hwmonX/pwmY_enable  # enable FAN2 manual mode
+$ echo 50 | sudo tee /sys/class/hwmon/hwmonX/pwmY         # set FAN2 to 50 (allowed 0-255)
+```
+
 ### From BMC
 
 [Read this](./BMC/Megarac_SP_2.02.76714/index.mdx#manual-fan-control)
-
-```bash
-$ echo 1  | sudo tee /sys/class/hwmon/hwmon7/pwm2_enable  #enable FAN2 manual mode
-$ echo 50 | sudo tee /sys/class/hwmon/hwmon7/pwm2         #set FAN2 to 50 (allowed 0-255)
-```
 
 <DocCardList />

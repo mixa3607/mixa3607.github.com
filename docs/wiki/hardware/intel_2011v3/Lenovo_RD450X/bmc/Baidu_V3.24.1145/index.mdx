@@ -52,6 +52,69 @@ Features:
 ### Если вставляю в dedicated порт кабель, то bmc не стартует
 
 Скорее всего физически умер порт даже если радостно мигает светодиодами. Используйте только shared порт или из системы через `ipmi_si`.
+<details>
+  <summary>dmesg</summary>
+
+```bash
+С одним шеред шнурком ака eth0
+# ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:00:00:00:11 brd ff:ff:ff:ff:ff:ff
+4: eth1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc pfifo_fast state DOWN qlen 1000
+    link/ether 6c:0b:84:d7:09:ce brd ff:ff:ff:ff:ff:ff
+5: sit0: <NOARP> mtu 1480 qdisc noop state DOWN
+    link/sit 0.0.0.0 brd 0.0.0.0
+6: ip6tnl0: <NOARP> mtu 1460 qdisc noop state DOWN
+    link/tunnel6 :: brd ::
+7: eth0.401@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1496 qdisc noqueue state UP
+    link/ether 00:00:00:00:00:11 brd ff:ff:ff:ff:ff:ff
+
+Воткнул и дедикейтед ака eth1
+# ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 00:00:00:00:00:11 brd ff:ff:ff:ff:ff:ff
+4: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 6c:0b:84:d7:09:ce brd ff:ff:ff:ff:ff:ff
+5: sit0: <NOARP> mtu 1480 qdisc noop state DOWN
+    link/sit 0.0.0.0 brd 0.0.0.0
+6: ip6tnl0: <NOARP> mtu 1460 qdisc noop state DOWN
+    link/tunnel6 :: brd ::
+7: eth0.401@eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1496 qdisc noqueue state UP
+    link/ether 00:00:00:00:00:11 brd ff:ff:ff:ff:ff:ff
+
+Отвал по вачдогу и смерть до сброса питания
+# dmesg
+...    
+<4>------------[ cut here ]------------
+<4>WARNING: at net/sched/sch_generic.c:226 dev_watchdog+0x13c/0x224()
+<6>NETDEV WATCHDOG: eth1 (): transmit timed out
+<4>Modules linked in: watchdog_hw pwmtach_hw peci_hw kcs_hw i2c_hw gpio_hw cipher_hw bt_hw adc_hw ncsi watchdog uartroute sdhc_hw hid usb0_hw cipher adc hdisk floppy cdrom usb1_hw iUSB videocap bt pwmtach gpio kcs peci usbe cpld_hw jtag_hw reset_hw jtag reset helper platform netmon
+<4>[<c02d9138>] (dump_stack+0x0/0x14) from [<c0037c2c>] (warn_slowpath+0x5c/0x78)
+<4>[<c0037bd0>] (warn_slowpath+0x0/0x78) from [<c022f2c8>] (dev_watchdog+0x13c/0x224)
+<4> r3:ccc43000 r2:c038c38f
+<4> r5:c03ec730 r4:ccc43000
+<4>[<c022f18c>] (dev_watchdog+0x0/0x224) from [<c0040af8>] (run_timer_softirq+0x14c/0x1d4)
+<4> r6:cc33c000 r5:00000100 r4:c03d9500
+<4>[<c00409ac>] (run_timer_softirq+0x0/0x1d4) from [<c003c804>] (__do_softirq+0x74/0x120)
+<4> r7:00000100 r6:cc33c000 r5:c03d93e0 r4:00000041
+<4>[<c003c790>] (__do_softirq+0x0/0x120) from [<c003cbfc>] (irq_exit+0x48/0x50)
+<4> r8:0000000a r7:42085fcd r6:00010000 r5:00000010 r4:00000000
+<4>[<c003cbb4>] (irq_exit+0x0/0x50) from [<c0028064>] (__exception_text_start+0x64/0x80)
+<4>[<c0028000>] (__exception_text_start+0x0/0x80) from [<c0028c64>] (__irq_usr+0x44/0x120)
+<4>Exception stack(0xcc33dfb0 to 0xcc33dff8)
+<4>dfa0:                                     00000001 00000000 0000000a 00000000
+<4>dfc0: 00000001 00000000 40fc1094 42085fcd 0000000a 00000000 40fc112c 42085e70
+<4>dfe0: 00000000 42085e08 40f5ce58 40f5d198 80000010 ffffffff
+<4> r5:fe6c0000 r4:ffffffff
+<4>---[ end trace 99f0d631d2e5e8bd ]---
+<4>eth1: transmit timed out
+```
+
+</details>
 
 ### BMC умер совсем и никак не получается достучаться до него
 
@@ -111,14 +174,7 @@ public async Task SetFanSpeedAsync(LenovoIpmiFanType fan, int percentage)
     if (percentage < 0)
         percentage = 100;
 
-    new ProcessStartInfo()
-    {
-        FileName = _options.IpmiToolFile ?? "ipmitool",
-        Arguments = $"{_options.AccessArgs} raw 0x2e 0x30 00 {(int)fan} {percentage}",
-        RedirectStandardError = true,
-        RedirectStandardOutput = true,
-        RedirectStandardInput = false,
-    }
+    $"ipmitool raw 0x2e 0x30 00 {(int)fan} {percentage}";
 }
 ```
 
@@ -132,6 +188,46 @@ public async Task SetFanSpeedAsync(LenovoIpmiFanType fan, int percentage)
 ### MAC repair
 
 После прошивки не из web ui нужно восстановить MAC'и. На данный момент получилось это сделать простым способом [через ipmitools (вариант с 1 MAC'ом)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#a-самый-простой-через-ipmitools-вариант-с-1-macом) и более муторным [с изменением UBoot env (все MAC'и)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#c-напрямую-редактируем-uboot-env-все-macи).
+
+Для более муторного варианта ниже есть уже готовая таблица разделов и `11-boot-env.json` в который нужно только вставить указать MAC'и и вшить в файл для прошивки с этой странички.
+```json title="partitions.json"
+{
+  "partitions": [
+    {
+      // uboot env
+      "fileName": "11-boot-env.bin",
+      "beginAddress": "0x00030000",
+      "endAddress": "0x00040000",
+    }
+  ]
+}
+```
+
+```json title="11-boot-env.json"
+{
+  "size": 65536,
+  "paddingSize": 4,
+  "hash": 1817084383,
+  "hashMatched": true,
+  "variables": {
+    "bootcmd": "bootfmh",
+    "bootdelay": "3",
+    "baudrate": "0x9600",
+    "loads_echo": "1",
+    "ethaddr": "6c:0b:84:d7:09:cd",  // change to shared
+    "eth1addr": "6c:0b:84:d7:09:ce", // change to dedicated
+    "autoload": "no",
+    "bootselector": "1",
+    "recentlyprogfw": "1",
+    "do_memtest": "0",
+    "memtest_pass": "idle",
+    "stdin": "serial",
+    "stdout": "serial",
+    "stderr": "serial",
+    "ethact": "ast_eth0"
+  }
+}
+```
 
 ## Разметка флеша
 

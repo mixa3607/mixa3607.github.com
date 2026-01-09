@@ -34,15 +34,25 @@ FW_CODEBASEVERSION=3.X
 
 ## Проблемы и их решения (?)
 
-### Кажется или в BMC неверные данные по температурам?
+#### BMC не ловит сеть
+Скорее всего слетел MAC из прошивки BMC. Првоерить можно выполнив:
+```bash
+$ sudo ipmitool lan print 1 | grep 'MAC Address'
+MAC Address             : 00:00:00:00:00:00
+$ sudo ipmitool lan print 8 | grep 'MAC Address'
+MAC Address             : 00:00:00:00:00:00
+```
+Если MAC стоит в нулях, то его нужно восстановить. Процесс максимально простой (2 команды) и [есть ниже](#mac-repair)
+
+#### Кажется или в BMC неверные данные по температурам?
 
 Не кажется. Не смотрим на попугаи в BMC, но вольтаж и обороты вертушек там правильно показывает (с округлением до сотен)
 
-### Не могу получить картинку через джаву
+#### Не могу получить картинку через джаву
 
 Полный мануал что и как можно [посмотреть тут](/docs/wiki/hardware/modding-and-hacks/megarac-sp/java-console/index.md), отличие только в том что П1 не нужно делать.
 
-### Что сделать что бы эта шайтан-машина сама не включалась
+#### Что сделать что бы эта шайтан-машина сама не включалась
 
 ```console
 $ # list policies
@@ -54,6 +64,8 @@ $ ipmitool -H 192.168.1.212 -U admin -P admin chassis policy previous
 Set chassis power restore policy to previous
 ```
 
+Но при подаче электричества борда всё равно будет стартовать первый раз!
+
 ## Dumps
 
 | Name                                             | SN         | MAC BMC; shared; 1; 2;                                  | About                  | Download                                                                                      |
@@ -64,6 +76,68 @@ Set chassis power restore policy to previous
 | IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin |            | F8CC6E033B9D; ; ; ;                                     | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC_EvILLIDAN_F8CC6E033B9D_configured.bin) |
 
 Уверенность, что нетронутый заводской BMC есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть сеть `SN: 1118199507`, маки валидыные стоят в u-boot env var секции.
+
+
+## Networking
+
+| ipmi channel | purpose | mac label | UBoot IF |
+| ------- | ------- | --------- | -------- |
+| 1       | shared     | верхняя наклейка `BMC MAC`          | ethaddr, eth1addr  |
+| 8       | dedicated  | он есть в BMC, но физически его НЕТ | -                  |
+
+### MAC repair
+
+На данный момент получилось это сделать простым способом [через ipmitools (вариант с 1 MAC'ом)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#a-самый-простой-через-ipmitools-вариант-с-1-macом) и более муторным [с изменением UBoot env](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#c-напрямую-редактируем-uboot-env-все-macи).
+
+- Если у вас слетел только с канала 1
+  - [через ipmitools (вариант с 1 MAC'ом)](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#a-самый-простой-через-ipmitools-вариант-с-1-macом)
+  - [с изменением UBoot env](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#c-напрямую-редактируем-uboot-env-все-macи)
+- Если у вас слетел только с канала 8 или с 1 и 8
+  - [с изменением UBoot env](/docs/wiki/hardware/modding-and-hacks/megarac-sp/mac-recovery/index.mdx#c-напрямую-редактируем-uboot-env-все-macи)
+
+Для более муторного варианта ниже есть уже готовая таблица разделов и `11-boot-env.json` в который нужно только вставить указать MAC'и и вшить в файл для прошивки с этой странички.
+```json title="partitions.json"
+{
+  "partitions": [
+    {
+      // uboot env
+      "fileName": "02_uboot-env.bin",
+      "beginAddress": "0x00040000",
+      "endAddress": "0x0004FFFC",
+    }
+  ]
+}
+```
+
+```json title="02_uboot-env.bin"
+{
+  "size": 65532,
+  "paddingSize": 0,
+  "hash": 1743925028,
+  "hashMatched": true,
+  "variables": {
+    "autoload": "no",
+    "baudrate": "0x9600",
+    "bootcmd": "bootfmh",
+    "bootdelay": "0",
+    "bootretry": "0x1",
+    "bootselector": "1",
+    "do_memtest": "0",
+    "eth1addr": "f8:cc:6e:03:3b:f2", // change to shared
+    "ethact": "ast_eth0",
+    "ethaddr": "f8:cc:6e:03:3b:f2",  // change to shared
+    "loads_echo": "1",
+    "memtest_pass": "idle",
+    "recentlyprogfw": "1",
+    "stderr": "serial",
+    "stdin": "serial",
+    "stdout": "serial",
+    "verify": "n"
+  }
+}
+```
+
+После любого из способов BMC должен начать получать сеть по DHCP.
 
 ## Получение рутового шелла
 Скачиваем [config_sh.bak](./config_sh.bak), заливаем его через `Maintenance` => `Backup/Restore Configuration`, идём по ssh на bmc и вуаля.
@@ -189,9 +263,7 @@ Slave list:
 </CodeBlock>
 </details>
 
-### BMC modding / MAC restore
-
-<UnderConstructionWarning />
+## Разметка флеша
 
 <details>
   <summary>`partitions table`</summary>
