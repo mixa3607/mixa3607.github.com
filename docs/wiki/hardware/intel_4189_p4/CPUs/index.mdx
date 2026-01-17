@@ -7,12 +7,15 @@ tags:
 ---
 
 import DocCardList from "@theme/DocCardList";
+import TableWrapper from "@site/src/components/TableWrapper.tsx";
 
 CPU samples
 
+<TableWrapper>
+
 | Code                     | Name  | Cores | Threads | Freq base | Freq boost | TDP | L3  | Stepping |
 | ------------------------ | ----- | ----- | ------- | --------- | ---------- | --- | --- | -------- |
-| QSTL                     | 6330  | 26    | 56      | 2         |            |     |     |          |
+| QSTL                     | 6330  | 26    | 56      | 2.0       |            |     |     |          |
 | QSTM                     |       |       |         | 2.2       |            |     |     |          |
 | QSTN                     | 5320H | 6     | 16      | 2.2       |            |     |     |          |
 | QU98                     | 6342  | 24    |         | 2.8       | 3.5        | 230 | 36  |          |
@@ -37,5 +40,7 @@ CPU samples
 | [QWAT](./QWAT/index.mdx) | 8368  | 38    | 76      | 2.2       | 3.4        | 270 | 57  | 6        |
 | QWAU                     |       |       |         |           |            |     |     | 6        |
 | QYFS                     |       |       |         |           |            |     |     |          |
+
+</TableWrapper>
 
 <DocCardList />

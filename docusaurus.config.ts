@@ -28,6 +28,11 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
+  scripts: [
+    {
+      src: "https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/dist/sortable.auto.min.js",
+    }
+  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -40,7 +45,7 @@ const config: Config = {
         name: "content",
         sourceBaseUrl: "https://github.com/mixa3607/uefi-mod-tools/raw/refs/tags/v1.1.0/",
         outDir: "docs/wiki/hardware/tools/uefi-mod-tools",
-        documents: ["readme.md"], 
+        documents: ["readme.md"],
         modifyContent: (filename: string, content: string) => ({ filename: "_" + filename, content })
       },
     ],
@@ -66,7 +71,10 @@ const config: Config = {
           showLastUpdateTime: true,
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: [
+            './src/css/custom.css',
+            './src/css/sortable-tables.css',
+          ],
         },
       } satisfies Preset.Options,
     ],
@@ -141,6 +149,13 @@ const config: Config = {
       darkTheme: prismThemes.duotoneDark,
       additionalLanguages: ['csharp', 'powershell', 'yaml', 'bash', 'ini'],
     },
+    announcementBar: {
+      id: "static-server-is-down",
+      backgroundColor: "#ff0000ff",
+      textColor: "#ffffffff",
+      isCloseable: false,
+      content: "Server with files is down. Some links may be not work"
+    }
   } satisfies Preset.ThemeConfig,
 };
 
