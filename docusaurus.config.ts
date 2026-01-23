@@ -149,13 +149,13 @@ const config: Config = {
       darkTheme: prismThemes.duotoneDark,
       additionalLanguages: ['csharp', 'powershell', 'yaml', 'bash', 'ini'],
     },
-    announcementBar: {
-      id: "static-server-is-down",
-      backgroundColor: "#ff0000ff",
-      textColor: "#ffffffff",
-      isCloseable: false,
-      content: "Server with files is down. Some links may be not work"
-    }
+    //announcementBar: {
+    //  id: "static-server-is-down",
+    //  backgroundColor: "#ff0000ff",
+    //  textColor: "#ffffffff",
+    //  isCloseable: false,
+    //  content: "Server with files is down. Some links may be not work"
+    //}
   } satisfies Preset.ThemeConfig,
 };
 
