@@ -25,7 +25,7 @@
       "fileName": "40_rw-fs.bin",
       "beginAddress": "0x000001c00000",
       "endAddress":   "0x000002000000",
-      "fileSystem": "squashfs"
+      "fileSystem": "jffs2"
     },
   ]
 }
