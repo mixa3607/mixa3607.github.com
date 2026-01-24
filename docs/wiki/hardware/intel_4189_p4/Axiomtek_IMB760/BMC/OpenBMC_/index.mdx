@@ -1,0 +1,107 @@
+---
+title: OpenBMC MOD F1
+sidebar_position: 10
+tags:
+  - bmc
+  - lga4189p4
+  - motherboard
+---
+
+import CodeBlock from "@theme/CodeBlock";
+import UnderConstructionWarning from "/docs/wiki/_snippets/under-construction-warning.mdx";
+import partitiontable from "!!raw-loader!./partitions-table.json";
+
+# Depo OpenBMC MOD F1
+
+Мод BMC на базе стокового Depo OpenBMC 1.0.1.
+
+BMC успешно прошел проверку на работу в связке с AMI BIOS так что шить EDK2 не обязательно.
+
+```yaml
+Machine model: DPC627-A
+Version: depo_dpc627-a_1_0_1
+Linux version: 6.1.51-6f8bb35-dirty-2dbad2a
+```
+
+<details>
+  <summary>Screenshot</summary>
+
+![bmc web ui screenshot](./bmc-screenshot.png)
+
+</details>
+
+## Key features
+- HTML5 KVM
+- RedFish
+
+## Changes
+- Это чистый BMC без хвостов от любых запусков
+- MAC изменён на `de:ad:be:ee:ee:ef`
+- Консоль изменена `ttyS4` => `ttyS1` (это колодка `IPMICOM1` на доске)
+
+## Проблемы и их решения (?)
+
+#### Прошивка BIOS через BMC не работает?
+
+Из того что смог исследовать, прошивка BIOS вообще не реализована.
+
+#### А где датчики?
+
+В ос бмц они видны, но в саму логику не выведены.
+
+#### Как залогиниться?
+
+По дефолту бмц получает ip по dhcp:
+- посмотреть в роутере
+- посмотреть из хост ос через `ipmitool lan print 1`
+
+```yaml title="Creds"
+login: root
+passwd: 0penBmc
+```
+
+## Downloads
+
+### 
+
+```yml
+name: IMB760-Depo-OpenBMC-1.0.1-mod-F1.bin
+sha256: b3448c9224833d846aa8901ac3345b9144a0eb53549ed09a24785523fddb087b
+isModded: yes
+```
+
+[Download IMB760-Depo-OpenBMC-1.0.1-mod-F1.bin](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760-Depo-OpenBMC-1.0.1-mod-F1.bin)
+
+## Networking
+
+| ipmi channel | purpose | mac label | UBoot IF |
+| ------- | ------- | --------- | -------- |
+| 1       | shared     | верхняя наклейка `BMC MAC`          | ethaddr  |
+
+### Смена MAC
+
+Поменять MAC можно концептуально двумя путями:
+- UBoot env (сохраняется при firmware reset)
+  - в ssh `fw_setenv ethaddr de:ad:be:ee:ee:ef`
+  - в дампе через патч `11_uboot-env.bin`
+- User RW file `/etc/systemd/network/00-bmc-eth0.network` (сбрасывается при firmware reset)
+  - в ос `ipmitool lan set 1 macaddr de:ad:be:ee:ee:ef`
+  - в web ui
+
+## Manual fan control
+
+К сожалению в саму логику BMC управление не выведено, но можно сходить по ssh и увидеть ровно те же hwmon устройства что и в хостовой ОС. Рулить ими можно тоже стандартными командами вида
+
+```bash title="Set FAN1 to 50%"
+echo 1   > /sys/class/hwmon/hwmon1/pwm1_enable
+echo 128 > /sys/class/hwmon/hwmon1/pwm1
+```
+
+## Разметка флеша
+
+<details>
+  <summary>`partitions table`</summary>
+  <CodeBlock language="json" title="partitions-table.json">
+    {partitiontable}
+  </CodeBlock>
+</details>

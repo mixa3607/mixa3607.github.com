@@ -1,0 +1,31 @@
+{
+  "partitions": [
+    {
+      "fileName": "10_uboot.bin",
+      "beginAddress": "0x000000000000",
+      "endAddress":   "0x000000060000",
+    },
+    {
+      "fileName": "11_uboot-env.bin",
+      "beginAddress": "0x000000060000",
+      "endAddress":   "0x000000080000",
+    },
+    {
+      "fileName": "20_kernel.bin",
+      "beginAddress": "0x000000080000",
+      "endAddress":   "0x0000004c0000",
+    },
+    {
+      "fileName": "30_ro-fs.bin",
+      "beginAddress": "0x0000004c0000",
+      "endAddress":   "0x000001c00000",
+      "fileSystem": "squashfs"
+    },
+    {
+      "fileName": "40_rw-fs.bin",
+      "beginAddress": "0x000001c00000",
+      "endAddress":   "0x000002000000",
+      "fileSystem": "squashfs"
+    },
+  ]
+}
