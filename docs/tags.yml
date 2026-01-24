@@ -2,6 +2,8 @@ ami:
   label: 'AMI'
 bmc:
   label: 'BMC'
+openbmc:
+  label: 'OpenBMC'
 bios:
   label: 'BIOS'
 megarac-sp:
