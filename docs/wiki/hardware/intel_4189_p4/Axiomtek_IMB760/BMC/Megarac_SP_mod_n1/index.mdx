@@ -13,8 +13,8 @@ tags:
 ```ini
 FW_VERSION=2.02.76714
 FW_DATE=Aug 8 2022
-FW_BUILDTIME=MOD N1 VER01
-FW_DESC=RR10 AST2500 MOD N1 VER 01
+FW_BUILDTIME=MOD N1 VER02
+FW_DESC=RR10 AST2500 MOD N1 VER 02
 FW_PRODUCTID=1
 FW_RELEASEID=RR9
 FW_CODEBASEVERSION=3.X
@@ -23,25 +23,14 @@ FW_CODEBASEVERSION=3.X
 ## Changes
 - Это чистый BMC без хвостов от любых запусков
 - MAC изменён на `de:ad:be:ee:ee:ef`
-- Консоль изменена `ttyS4` => `ttyS1` (это колодка `IPMICOM1` на доске)
 - Встроен хак [с рутовым шеллом на ssh](../Megarac_SP_2.02.76714/index.mdx#root-shell)
-
-## Serial console
-```yaml
-Port: IPMICOM1
-Baudrate: 38400
-```
 
 ## Downloads
 
 ```yml
-name: IMB760_BMC-Axiomtek-MegaracSP-mod-N1.bin
-sha256: b3448c9224833d846aa8901ac3345b9144a0eb53549ed09a24785523fddb087b
+name: IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin
+sha256: 2513e92be52ead9ccd7d8d528831fbb6cfb45cca0dbbd5bf042e98be629d50c6
 isModded: yes
 ```
 
-:::note
-Нужно перезагрузить BMC после первого старта (дёрнуть питание или из системы через `ipmitool mc reset cold`)
-:::
-
-[Download IMB760_BMC-Axiomtek-MegaracSP-mod-N1.bin](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC-Axiomtek-MegaracSP-mod-N1.bin)
+[Download IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin)
