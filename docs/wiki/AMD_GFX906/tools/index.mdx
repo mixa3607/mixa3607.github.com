@@ -1,0 +1,147 @@
+---
+title: Tools
+sidebar_position: 20
+---
+
+import FileInfo from "@site/src/components/FileInfo";
+
+## atitool
+
+AMD leaked service tool
+
+```
+ATITOOL version 1.14.0.10, Copyright (c) 2019 Advanced Micro Devices, Inc.
+
+HELP:
+  ATITOOL clock        Displays options for clock operations
+  ATITOOL powerplay    Displays options for PowerPlay operations
+  ATITOOL pcie         Displays options for PCIE operations
+  ATITOOL vctf         Displays options for Voltage/Current/Thermal/Fan control
+  ATITOOL sid          Displays options for ASIC Serial ID
+  ATITOOL mc           Displays options for memory controller settings
+  ATITOOL flash        Displays options for ROM operations
+  ATITOOL display      Displays options for Display operations
+  ATITOOL clockoutput  Displays options for clock observation operations
+  ATITOOL reset        Displays options for reset operations
+  ATITOOL efuse        Displays options for verifying EFUSE infomation
+  ATITOOL hwid         Displays options for various ASIC/Board related info
+  ATITOOL baco         Displays options for BACO (Bus Alive Chip Off) operations
+  ATITOOL cail         Displays options for CAIL (Common ASIC Init Library) operations
+  ATITOOL fw           Displays options for firmware related operations for SMC and micro engines
+  ATITOOL btc          Displays options for Boot Time Caibration and Power Supply Monitor logging
+  ATITOOL pace         Displays options for getting/setting PACE table
+  ATITOOL pm           Displays options for Power Management parameters logging
+  ATITOOL gpustatus    Displays options for GPU status
+  ATITOOL raserrortest Displays options for RAS error injection/detection and error counters
+
+COMMAND:
+  ATITOOL -v=silent      Run ATITOOL in silent mode with no screen output
+  ATITOOL -UseVbiosImage{=<filename>}  Use vbios image from a file
+  ATITOOL -DumpVbiosImage{=<filename>} Dump vbios image to a file
+  ATITOOL -i             Displays a list of all present ATI graphics devices
+  ATITOOL -i=<#>       Select a target device to apply commands. Supports both simple index (reported
+                       by -i) and PCI location (-i=PCI:<bn>.<dn>.<fn>)
+  ATITOOL -usefinddevice Debug flag to target a specific device (requires -i=PCI:xx.yy.zz)
+  ATITOOL -asicinit    Initialize ASIC into working state (ie. secondary GPU)
+                       Can be combined with -i=<#>
+  ATITOOL -forceasicinit Initialize ASIC into working state even if it's already initialized
+  ATITOOL -skipvbiospost Do not perform VBIOS post on uninitialized GPUs
+  ATITOOL -sriovLoadUcode Load SRIOV Ucodes. Applies to -asicinit.
+  ATITOOL -debug=<#>   Enable debug logging (generates TOOL.LOG), <#> = verbosity
+  ATITOOL -logpath=<#> Specify location of debug log file (TOOL.LOG)
+  ATITOOL -logtoconsole Content sent to debug log (TOOL.LOG) is redirected to console. Useful on read only filesystems
+  ATITOOL -pxversion   Check the PowerXpress version of the system
+  ATITOOL -boardid=<#> Override board ID with given string. Useful when VBIOS image is missing board ID string
+  * if there is only one device, the above option is not required
+```
+
+<FileInfo
+  name="atitool.tar.xz"
+  version="1.14.0.10 2019"
+  downloadUrl="@storageBaseUrl@/AMD-GFX906/Tools/atitool.tar.xz"
+  sha256hash="f6efc274e148c0b3b1f16df49791bb78d2ff57d314debe052646dd884cc2db0f"
+></FileInfo>
+
+## wolfamdctrl / ohgodatool
+
+### OhGodATool
+
+```
+OhGodATool v1.2.1
+Usage: ./ohgodatool [-i GPUIdx | -f VBIOSFile] [Generic Options] [--core-state StateIdx] [--mem-state StateIdx] [--volt-state StateIdx] [State modification options]
+Generic modification options:
+        --set-fanspeed <percent>
+        --set-tdp <W>
+        --set-tdc <W>
+        --set-max-power <W>
+        --set-max-core-clock <Mhz>
+        --set-max-mem-clock <Mhz>
+State selection options (must be used before state modification options):
+        --core-state <index>
+        --mem-state <index>
+        --volt-state <index>
+State modification options:
+        --mem-clock <Mhz>
+        --core-clock <Mhz>
+        --mem-vddc-idx <index>
+        --core-vddc-idx <index>
+        --mvdd <mV>
+        --vddci <mV>
+        --core-vddc-off <mV>
+        --vddc-gfx-off <mV>
+        --vddc-table-set <mV>
+Display options (shows the selected states, or if none selected, all states):
+        --show-mem
+        --show-core
+        --show-voltage
+        --show-fanspeed
+        --show-temp
+```
+
+<FileInfo
+  name="ohgodatool.tar.xz"
+  version="v1.2.1"
+  downloadUrl="@storageBaseUrl@/AMD-GFX906/Tools/ohgodatool.tar.xz"
+  sha256hash="9dac4b610e93b7d30162eb6fca5fa3de4279c13fefb0757a5fd9b8dcf9e75843"
+></FileInfo>
+
+### wolfamdctrl
+
+```
+wolfamdctrl v1.2.0
+Usage: ./wolfamdctrl [-i GPUIdx | -f VBIOSFile] [Generic Options] [--core-state StateIdx] [--mem-state StateIdx] [--volt-state StateIdx] [State modification options]
+Generic modification options:
+        --set-fanspeed <percent>
+        --set-tdp <W>
+        --set-tdc <W>
+        --set-max-power <W>
+        --set-max-core-clock <Mhz>
+        --set-max-mem-clock <Mhz>
+State selection options (must be used before state modification options):
+        --core-state <index>
+        --mem-state <index>
+        --volt-state <index>
+State modification options:
+        --mem-clock <Mhz>
+        --core-clock <Mhz>
+        --mem-vddc-idx <index>
+        --core-vddc-idx <index>
+        --mvdd <mV>
+        --vddci <mV>
+        --core-vddc-off <mV>
+        --vddc-gfx-off <mV>
+        --vddc-table-set <mV>
+Display options (shows the selected states, or if none selected, all states):
+        --show-mem
+        --show-core
+        --show-voltage
+        --show-fanspeed
+        --show-temp
+```
+
+<FileInfo
+  name="wolfamdctrl.tar.xz"
+  version="v1.2.0"
+  downloadUrl="@storageBaseUrl@/AMD-GFX906/Tools/wolfamdctrl.tar.xz"
+  sha256hash="e09dfe0f9b837149589ce76b49d70db2ed0bab83a5b8aa7c0e2f0b3f9db0e1f1"
+></FileInfo>
