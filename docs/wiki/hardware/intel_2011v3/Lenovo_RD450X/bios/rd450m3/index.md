@@ -7,6 +7,8 @@ tags:
   - motherboard
 ---
 
+import FileInfo from "@site/src/components/FileInfo";
+
 # rd450m3
 
 [Биос с оверов](https://forums.overclockers.ru/viewtopic.php?p=18490614#p18490614):
@@ -36,24 +38,20 @@ tags:
 - в системе виден ipmi
 - работает управление питанием из BMC V3.24.1145
 
-## rd450m3v4.rom
+<FileInfo
+  name="rd450m3v4.rom"
+  downloadUrl="@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450m3v4.rom"
+  sha256hash="5290b982129cd7e19e2ef09516eb3de7cecd00e0146b1cc2bc65fa46ab942545">
 
-```yml
-Комментарий к файлу: Основной вариант (v4, но прекрасно работает и с v3)
-name: rd450m3v4.rom
-sha256: 5290b982129cd7e19e2ef09516eb3de7cecd00e0146b1cc2bc65fa46ab942545
-isModded: yes
-```
+Основной вариант (v4, но прекрасно работает и с v3)
 
-[Download rd450m3v4.rom](@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450m3v4.rom)
+</FileInfo>
 
-## rd450m3v3.rom
+<FileInfo
+  name="rd450m3v3.rom"
+  downloadUrl="@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450m3v3.rom"
+  sha256hash="90cac80bfd099f27f226d29836fe77582b2fb2bf7cc10e5dddca84a35873c4e1">
 
-```yml
-Комментарий к файлу: То же с добавлением драйвера турбобуста (только для v3, v4 также будут работать с этим вариантом, но я за чистоту прошивок)
-name: rd450m3v3.rom
-sha256: 90cac80bfd099f27f226d29836fe77582b2fb2bf7cc10e5dddca84a35873c4e1
-isModded: yes
-```
+То же с добавлением драйвера турбобуста (только для v3, v4 также будут работать с этим вариантом, но я за чистоту прошивок)
 
-[Download rd450m3v3.rom](@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450m3v3.rom)
+</FileInfo>

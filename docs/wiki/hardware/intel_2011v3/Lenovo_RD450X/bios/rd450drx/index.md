@@ -6,6 +6,7 @@ tags:
   - lga2011v3
   - motherboard
 ---
+import FileInfo from "@site/src/components/FileInfo";
 
 # rd450m3
 
@@ -37,12 +38,8 @@ tags:
 - в системе виден ipmi
 - работает управление питанием из BMC V3.24.1145
 
-## rd450drx_NC.rom
-
-```yml
-name: rd450m3v4.rom
-sha256: e0d6fa5caff02b7b2e8569b470119806170e2da7a22c9164cc4dfd855c8ea344
-isModded: yes
-```
-
-[Download rd450drx_NC.rom](@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450drx_NC.rom)
+<FileInfo
+  name="rd450drx_NC.rom"
+  downloadUrl="@storageBaseUrl@/Lenovo-RD450x/BIOS/rd450drx_NC.rom"
+  sha256hash="e0d6fa5caff02b7b2e8569b470119806170e2da7a22c9164cc4dfd855c8ea344"
+></FileInfo>

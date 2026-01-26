@@ -6,6 +6,9 @@ tags:
   - lga4189p4
   - motherboard
 ---
+
+import FileInfo from "@site/src/components/FileInfo";
+
 # Axiomtek AMI Megarac SP MOD N1
 
 Мод BMC на базе стокового Axiomtek AMI Megarac SP 2.02.76714.
@@ -21,16 +24,15 @@ FW_CODEBASEVERSION=3.X
 ```
 
 ## Changes
+
 - Это чистый BMC без хвостов от любых запусков
 - MAC изменён на `de:ad:be:ee:ee:ef`
 - Встроен хак [с рутовым шеллом на ssh](../Megarac_SP_2.02.76714/index.mdx#root-shell)
 
 ## Downloads
 
-```yml
-name: IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin
-sha256: 2513e92be52ead9ccd7d8d528831fbb6cfb45cca0dbbd5bf042e98be629d50c6
-isModded: yes
-```
-
-[Download IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin](@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin)
+<FileInfo
+  name="IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin"
+  downloadUrl="@storageBaseUrl@/Axiomtek-IMB760/BMC/IMB760_BMC-Axiomtek-MegaracSP-mod-N1-v2.bin"
+  sha256hash="2513e92be52ead9ccd7d8d528831fbb6cfb45cca0dbbd5bf042e98be629d50c6"
+></FileInfo>
