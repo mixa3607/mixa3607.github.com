@@ -1,11 +1,13 @@
 ---
 title: AMI Aptio IMB760 V1.00
-sidebar_position: 20
+sidebar_position: 10
 tags:
   - bios
   - lga4189p4
   - motherboard
 ---
+
+import FileInfo from "@site/src/components/FileInfo";
 
 # Axiomtek AMI Aptio `V1.00 / 5.21`
 
@@ -33,21 +35,37 @@ systemBiosMinorRelease: 21
 
 ## Microcodes
 
-| # | Type      | CPUID | Platforms      | Revision | Date       | State | Size     | Offset      | Last |
-|---|-----------|-------|----------------|----------|------------|-------|----------|-------------|------|
-| 1 | Microcode | 606A4 | 87 (0,1,2,7)   | B000280  | 2020-08-17 | PRD   | 0x42800  | 0x1B00090   | Yes  |
-| 2 | Microcode | 606A5 | 87 (0,1,2,7)   | C0002F0  | 2021-03-08 | PRD   | 0x45400  | 0x1B42890   | Yes  |
-| 3 | Microcode | 606A6 | 87 (0,1,2,7)   | D000280  | 2021-03-31 | PRD   | 0x45400  | 0x1B87C90   | No   |
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                               Intel                                               ║
+╟───┬───────────┬───────┬──────────────┬──────────┬────────────┬───────┬─────────┬───────────┬──────╢
+║ # │    Type   │ CPUID │  Platforms   │ Revision │    Date    │ State │   Size  │   Offset  │ Last ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 1 │ Microcode │ 606A4 │ 87 (0,1,2,7) │ B000280  │ 2020-08-17 │  PRD  │ 0x42800 │ 0x1B00090 │ Yes  ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 2 │ Microcode │ 606A5 │ 87 (0,1,2,7) │ C0002F0  │ 2021-03-08 │  PRD  │ 0x45400 │ 0x1B42890 │ Yes  ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 3 │ Microcode │ 606A6 │ 87 (0,1,2,7) │ D0002B1  │ 2021-05-13 │  PRD  │ 0x46000 │ 0x1B87C90 │  No  ║
+╚═══╧═══════════╧═══════╧══════════════╧══════════╧════════════╧═══════╧═════════╧═══════════╧══════╝
+```
 
+## Downloads
 
-## Dumps
+<FileInfo
+  name="IMB760_BIOS.bin"
+  downloadUrl="@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS.bin"
+  sha256hash="9d4447d4cb9a095a0caa5ca7ecd14645af8936ee43a33071b7394c5f1fb9a961"
+  version="V1.00 / 5.21"
+></FileInfo>
 
-| Name                                              | SN         | About                  | Download                                                                                        |
-| ------------------------------------------------- | ---------- | ---------------------- | ----------------------------------------------------------------------------------------------- |
-| IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin)   |
-| IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
-| IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_configured.bin)  |
-| IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin       | 1118199507 | after reset            | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_mixa3607_F8CC6E033BF2_reset.bin)       |
-| IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin |            | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin) |
+## Other dumps
+
+| Name                                                  | SN         | About                  | Download                                                                                            |
+| ----------------------------------------------------- | ---------- | ---------------------- | --------------------------------------------------------------------------------------------------- |
+| IMB760_AMI_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin   | 1118199395 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_AMI_BIOS_mixa3607_F8CC6E033B82_zero-boot.bin)   |
+| IMB760_AMI_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin   | 1118199428 | zero boot/facory image | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_AMI_BIOS_mixa3607_F8CC6E033BA3_zero-boot.bin)   |
+| IMB760_AMI_BIOS_mixa3607_F8CC6E033BF2_configured.bin  | 1118199507 | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_AMI_BIOS_mixa3607_F8CC6E033BF2_configured.bin)  |
+| IMB760_AMI_BIOS_mixa3607_F8CC6E033BF2_reset.bin       | 1118199507 | after reset            | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_AMI_BIOS_mixa3607_F8CC6E033BF2_reset.bin)       |
+| IMB760_AMI_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin |            | configured after boot  | [dump](@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_AMI_BIOS_EvILLIDAN_F8CC6E033B9D_configured.bin) |
 
 Уверенность что нетронутый заводской BIOS есть только в `SN: 1118199428` +-, остальные либо точно после бута, либо не точно. Дамп на котором точно есть бут `SN: 1118199507`

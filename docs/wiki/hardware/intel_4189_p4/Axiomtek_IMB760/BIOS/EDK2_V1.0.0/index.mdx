@@ -1,0 +1,60 @@
+---
+title: TianoCore EDK2 V1.0
+sidebar_position: 30
+tags:
+  - bios
+  - lga4189p4
+  - motherboard
+---
+
+import UnderConstructionWarning from "/docs/wiki/_snippets/under-construction-warning.mdx";
+import FileInfo from "@site/src/components/FileInfo";
+
+# Depo TianoCore EDK2 `v1.0`
+
+Сборка EDK2 BIOS от Depo.
+
+```yaml
+vendor: TianoCore EDK II Project
+version: v1.0
+```
+
+<details>
+  <summary>Screenshot</summary>
+
+![bmc web ui screenshot](./screenshot-1.png)
+
+</details>
+
+## Docs
+
+- [DEPO BIOS Manual](@storageBaseUrl@/Axiomtek-IMB760/docs/Manual_Depo_BIOS_DPC627-A.pdf)
+
+## Проблемы и их решения (?)
+
+<UnderConstructionWarning />
+
+#### Как зашить?
+
+Пока только прищепкой
+
+## Microcodes
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                               Intel                                               ║
+╟───┬───────────┬───────┬──────────────┬──────────┬────────────┬───────┬─────────┬───────────┬──────╢
+║ # │    Type   │ CPUID │  Platforms   │ Revision │    Date    │ State │   Size  │   Offset  │ Last ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 1 │ Microcode │ 606A6 │ 87 (0,1,2,7) │ D0002C1  │ 2021-05-27 │  PRD  │ 0x46400 │ 0x1150090 │  No  ║
+╚═══╧═══════════╧═══════╧══════════════╧══════════╧════════════╧═══════╧═════════╧═══════════╧══════╝
+```
+
+## Downloads
+
+<FileInfo
+  name="IMB760_EDK2_BIOS.bin"
+  downloadUrl="@storageBaseUrl@/Axiomtek-IMB760/BIOS/IMB760_EDK2_BIOS.bin"
+  sha256hash="04ade2b3c594ec57574e42535ecd81a535086b5eb94d401c07d22ad940c684ff"
+  version="v1.0.0"
+></FileInfo>

@@ -5,6 +5,7 @@ sidebar_position: 20
 
 import DocCardList from "@theme/DocCardList";
 import {useCurrentSidebarSiblingsContainsName} from '@site/src/components/sidebarUtils.tsx';
+import FileInfo from "@site/src/components/FileInfo";
 
 Полезные тулы
 
@@ -14,18 +15,31 @@ Intel® Memory Latency Checker (Intel® MLC) is a tool used to measure memory la
 
 About [Intel® Memory Latency Checker](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html):
 
-- [Linux/Win 3.12](@storageBaseUrl@/tools/mlc_v3.12/mlc_v3.12.tgz)
-
 :::note
 Measuring Cache Performance with Intel Memory Latency Checker (MLC): [medium.com @wrightchen](https://medium.com/@wrightchen/intel-memory-latency-checker-mlc-for-cache-testing-deep-dive-b8b2c30bacab)
 :::
 
+<FileInfo
+  name="mlc_v3.12.tgz"
+  version="v3.12"
+  downloadUrl="@storageBaseUrl@/tools/mlc_v3.12/mlc_v3.12.tgz"
+></FileInfo>
+
 ## AMIBCP
 
-AMI BIOS edit tool:
+AMI BIOS edit tool
 
-- [AMIBCP_5.02.0031.exe](@storageBaseUrl@/tools/AMIBCP_5.02.0031/AMIBCP_5.02.0031.exe)
-- [AMIBCP_5.02.0034.exe](@storageBaseUrl@/tools/AMIBCP_5.02.0034/AMIBCP_5.02.0034.exe)
+<FileInfo
+  name="AMIBCP_5.02.0034.exe"
+  version="5.02.0034"
+  downloadUrl="@storageBaseUrl@/tools/AMIBCP_5.02.0034/AMIBCP_5.02.0034.exe"
+></FileInfo>
+
+<FileInfo
+  name="AMIBCP_5.02.0031.exe"
+  version="5.02.0031"
+  downloadUrl="@storageBaseUrl@/tools/AMIBCP_5.02.0031/AMIBCP_5.02.0031.exe"
+></FileInfo>
 
 ## AMI ROM Tool
 
@@ -35,6 +49,78 @@ Aptio 5.x AFU (AFUEFI/AFULNX/AFUWIN/AFUDOS) flashing BIOS tool
 - AFUWIN [download](@storageBaseUrl@/tools/AMI-Firmware-Update-Utility/afu/afuwin) - windows (винда стабильно встаёт в позу при попытке заюзать бинарь)
 - AFUDOS [download](@storageBaseUrl@/tools/AMI-Firmware-Update-Utility/afu/afudos) - dos (под uefi-only системы не подойдёт)
 - AFULNX - linux (под древние ядра, поднять около нереально, идём мимо)
+
+```text title="AfuEfix64 help"
++---------------------------------------------------------------------------+
+|                 AMI Firmware Update Utility v5.15.00.0064                 |
+|      Copyright (c) 1985-2021, American Megatrends International LLC.      |
+|         All rights reserved. Subject to AMI licensing agreement.          |
++---------------------------------------------------------------------------+
+| Usage: AfuEfix64.efi <ROM File Name> [Option 1] [Option 2]...             |
+|           or                                                              |
+|        AfuEfix64.efi <Input or Output File Name> <Command>                |
+|           or                                                              |
+|        AfuEfix64.efi <Command>                                            |
+| ------------------------------------------------------------------------- |
+| Commands:                                                                 |
+|        /FV - Copy Secure FV to EFI.                                       |
+|         /O - Save current ROM image to file                               |
+|         /U - Display ROM File's ROMID                                     |
+|         /S - Refer to Options: /S                                         |
+|         /D - Verification test of given ROM File without flashing BIOS.   |
+|        /A: - Refer to Options: /A:                                        |
+|       /OAD - Refer to Options: /OAD                                       |
+| /CLNEVNLOG - Refer to Options: /CLNEVNLOG                                 |
+| Options:                                                                  |
+|      /CMD: - Send special command to BIOS. /CMD:{xxx}                     |
+|   /OEMCMD: - Send special value to BIOS. /OEMCMD:xxx                      |
+|       /DPC - Don't Check Aptio 4 and Aptio 5 platform.                    |
+|       /PW: - Input password for file.                                     |
+|     /MEUL: - Program ME Entire Firmware Block, which supports             |
+|              Production.BIN and PreProduction.BIN files.                  |
+|         /Q - Silent execution                                             |
+|         /X - Don't Check ROM ID                                           |
+|         /S - Display current system's ROMID                               |
+|       /JBC - Don't Check AC adapter and battery                           |
+|  /HOLEOUT: - Save specific ROM Hole according to RomHole GUID.            |
+|              NewRomHole1.BIN /HOLEOUT:GUID                                |
+|        /SP - Preserve Setup setting.                                      |
+|         /R - Preserve ALL SMBIOS structure during programming             |
+|        /Rn - Preserve SMBIOS type N during programming(n=0-255)           |
+|         /B - Program Boot Block                                           |
+|         /P - Program Main BIOS                                            |
+|         /N - Program NVRAM                                                |
+|         /K - Program all non-critical blocks.                             |
+|        /Kn - Program n'th non-critical block(n=0-15).                     |
+|      /RLC: - To set default option for Rom layout change.(E:Entire BIOS   |
+|              region, A:Abort, F:Force, M:Mix Non-BIOS region command.)    |
+|    /CLRCFG - Program without preserving setup configuration               |
+|    /BCPALL - Save all question values before flash                        |
+|    /MLANG: - Multiple mapping language support.                           |
+|     /HOLE: - Update specific ROM Hole according to RomHole GUID.          |
+|              NewRomHole1.BIN /HOLE:GUID                                   |
+|  /K:<GUID> - Program non-critical block by GUID.                          |
+|         /L - Program all ROM Holes.                                       |
+|        /Ln - Program n'th ROM Hole only(n=0-15).                          |
+|      /ECUF - Update EC BIOS when newer version is detected.               |
+|         /E - Program Embedded Controller Block                            |
+|        /ME - Program ME Entire Firmware Block.                            |
+|       /FDR - Flash FDR.                                                   |
+|      /GBER - Flash GBER Region.                                           |
+|       /DER - Flash DER.                                                   |
+|       /PTT - Flash PTT.                                                   |
+|       /MER - Flash MER.                                                   |
+|      /MEUF - Program ME Ignition Firmware Block.                          |
+|        /A: - Oem Activation file                                          |
+|       /OAD - Delete Oem Activation key                                    |
+| /CLNEVNLOG - Clear Event Log.                                             |
+|   /CAPSULE - Override Secure Flash policy to Capsule                      |
+|  /RECOVERY - Override Secure Flash policy to Recovery                     |
+|        /EC - Program Embedded Controller Block. (Flash Type)              |
+|    /REBOOT - Reboot after programming.                                    |
+|  /SHUTDOWN - Shutdown after programming.                                  |
++---------------------------------------------------------------------------+
+```
 
 ## UEFITool
 
