@@ -1,0 +1,60 @@
+---
+title: TianoCore EDK2 MOD L1
+sidebar_position: 40
+tags:
+  - bios
+  - lga4189p4
+  - motherboard
+---
+
+import UnderConstructionWarning from "/docs/wiki/_snippets/under-construction-warning.mdx";
+import FileInfo from "@site/src/components/FileInfo";
+
+# Depo TianoCore EDK2 MOD L1
+
+Mod на базе сборки EDK2 BIOS от Depo.
+
+```yaml
+vendor: TianoCore EDK II Project
+```
+
+<details>
+  <summary>Screenshot</summary>
+
+![bmc web ui screenshot](./screenshot-1.png)
+
+</details>
+
+## Changes
+
+- Добавлены микрокоды 606A4 и 606A5
+- Обновлен микрокод 606A6 до последней версии
+
+:::note
+606A5 и 606A6 проверены запуском с QVM7 и QWAT
+:::
+
+## Microcodes
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗
+║                                               Intel                                               ║
+╟───┬───────────┬───────┬──────────────┬──────────┬────────────┬───────┬─────────┬───────────┬──────╢
+║ # │    Type   │ CPUID │  Platforms   │ Revision │    Date    │ State │   Size  │   Offset  │ Last ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 1 │ Microcode │ 606A6 │ 87 (0,1,2,7) │ D000421  │ 2025-08-19 │  PRD  │ 0x4B800 │ 0x1100080 │ Yes  ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 2 │ Microcode │ 606A4 │ 87 (0,1,2,7) │ B000280  │ 2020-08-17 │  PRD  │ 0x42800 │ 0x1150090 │ Yes  ║
+╟───┼───────────┼───────┼──────────────┼──────────┼────────────┼───────┼─────────┼───────────┼──────╢
+║ 3 │ Microcode │ 606A5 │ 87 (0,1,2,7) │ C0002F0  │ 2021-03-08 │  PRD  │ 0x45400 │ 0x1196490 │ Yes  ║
+╚═══╧═══════════╧═══════╧══════════════╧══════════╧════════════╧═══════╧═════════╧═══════════╧══════╝
+```
+
+## Downloads
+
+<FileInfo
+  name="github: mixa3607/ami-patching-infra"
+  downloadUrl="https://github.com/mixa3607/ami-patching-infra/releases"
+></FileInfo>
+
+Пока есть много неизвестных моментов, вэлкам ту PR на [github: mixa3607/ami-patching-infra](https://github.com/mixa3607/ami-patching-infra?tab=readme-ov-file#%D1%81%D1%82%D0%B0%D1%82%D1%83%D1%81-%D0%BF%D0%BE-%D0%BC%D0%B5%D0%BD%D1%8E)
