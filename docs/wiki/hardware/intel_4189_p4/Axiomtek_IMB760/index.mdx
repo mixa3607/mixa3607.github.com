@@ -8,6 +8,7 @@ tags:
 
 import CodeBlock from "@theme/CodeBlock";
 import DocCardList from "@theme/DocCardList";
+import TableWrapper from "@site/src/components/TableWrapper.tsx";
 import biosdecode from "!!raw-loader!./biosdecode.txt";
 import dmidecode from "!!raw-loader!./dmidecode.txt";
 import sensors from "!!raw-loader!./sensors.txt";
@@ -38,6 +39,20 @@ Dual LGA4189 motherboard
 - mosfets 7x MP86956 delivers 70A per socket ([source](https://forum.ixbt.com/topic.cgi?id=9:70249:141#141))
 - all es 4-6 stepping cpus works
 - only 24 pin + 2x cpu 8 pin is required, all other is optional
+- LRDIMM и RDIMM - работают, UDIMM - не работают
+
+## PCIe slots mapping
+
+<TableWrapper>
+| PCB label | socket   | slot len | IOU   |
+| --------- | -------- | -------- | ----- |
+| slot 2    | Socket 2 | x8       | IOU 1 |
+| slot 3    | Socket 2 | x16      | IOU 0 |
+| slot 4    | Socket 1 | x16      | IOU 0 |
+| slot 5    | Socket 1 | x16      | IOU 1 |
+| slot 6    | Socket 1 | x16      | IOU 3 |
+| slot 7    | Socket 2 | x8       | IOU 1 |
+</TableWrapper>
 
 <details>
   <summary>`$ biosdecode`</summary>
@@ -57,6 +72,8 @@ Dual LGA4189 motherboard
   - A: Бывает, используйте [intel mlc](/docs/wiki/hardware/tools/index.mdx#intel-mlc)
 - Q: В мод биосе есть разблокированный пункт с типом RAM RDIMM/UDIMM. Он работает?
   - A: Плату с UDIMM завести не удалось, шуршит вентиляторами, старта нет
+- Q: В мануале ничего нет про LRDIMM. Они работают?
+  - A: Да, есть старт с 8x Samsung 32G 2133 LRDIMM
 - ...прочие проблемы специфичны для BIOS/BMC
 
 ## Sensors
