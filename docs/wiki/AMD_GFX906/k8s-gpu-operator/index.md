@@ -1,5 +1,5 @@
 ---
-title: AMD GPU Operator
+title: K8S GPU Operator
 sidebar_position: 10
 ---
 
