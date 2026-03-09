@@ -66,7 +66,7 @@ const config: Config = {
           routeBasePath: '/',
           editUrl: 'https://github.com/mixa3607/mixa3607.github.com/edit/master',
           sidebarPath: './sidebars.ts',
-          sidebarCollapsed: false,
+          //sidebarCollapsed: false,
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
