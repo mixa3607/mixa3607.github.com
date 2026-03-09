@@ -30,13 +30,13 @@
 }
 
 .container {
-  max-width: none;
+  max-width: none !important;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .footer {
-  display: none;
+  display: none !important;
 }

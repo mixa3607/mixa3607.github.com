@@ -10,7 +10,7 @@ import VllmHelmNote from "/docs/wiki/AMD_GFX906/vllm/_helm_note.mdx";
 
 <VllmHelmNote/>
 
-## A. [gaunernst/gemma-3-27b-it-qat-autoawq](https://huggingface.co/gaunernst/gemma-3-27b-it-qat-autoawq) + vLLM 0.12.0
+## A. [gaunernst/gemma-3-27b-it-qat-autoawq](https://huggingface.co/gaunernst/gemma-3-27b-it-qat-autoawq) + vLLM 0.12.0 {#gemma-setup-a}
 
 ```yaml title="yaml setup"
 image:

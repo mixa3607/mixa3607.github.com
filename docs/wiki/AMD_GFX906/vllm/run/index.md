@@ -1,5 +1,5 @@
 ---
-title: Run vLLM
+title: Run
 sidebar_position: 10
 ---
 
