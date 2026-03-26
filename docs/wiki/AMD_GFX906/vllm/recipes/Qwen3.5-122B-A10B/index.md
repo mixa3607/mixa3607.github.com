@@ -10,7 +10,7 @@ import VllmHelmNote from "/docs/wiki/AMD_GFX906/vllm/_helm_note.mdx";
 
 <VllmHelmNote/>
 
-## A. [QuantTrio/Qwen3.5-122B-A10B-AWQ](https://huggingface.co/QuantTrio/Qwen3.5-122B-A10B-AWQ) + vLLM 0.12.0 {#setup-a}
+## A. [QuantTrio/Qwen3.5-122B-A10B-AWQ](https://huggingface.co/QuantTrio/Qwen3.5-122B-A10B-AWQ) + vLLM 0.17.x {#setup-a}
 
 ```yaml title="yaml setup"
 image:
