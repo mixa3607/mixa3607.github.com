@@ -6,7 +6,7 @@ sidebar_position: 202
 import DocCardList from "@theme/DocCardList";
 import VllmHelmNote from "/docs/wiki/AMD_GFX906/vllm/_helm_note.mdx";
 
-# Gemma3 27B vLLM recipes
+# Qwen3 VL 32B vLLM recipes
 
 <VllmHelmNote/>
 
