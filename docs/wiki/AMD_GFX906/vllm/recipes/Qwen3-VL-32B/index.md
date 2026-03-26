@@ -1,6 +1,6 @@
 ---
 title: Qwen3 VL 32B
-sidebar_position: 30
+sidebar_position: 202
 ---
 
 import DocCardList from "@theme/DocCardList";

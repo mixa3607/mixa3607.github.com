@@ -1,6 +1,6 @@
 ---
 title: Gemma3 27B
-sidebar_position: 10
+sidebar_position: 101
 ---
 
 import DocCardList from "@theme/DocCardList";

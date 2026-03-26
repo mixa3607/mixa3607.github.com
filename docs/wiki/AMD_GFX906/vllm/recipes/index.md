@@ -7,8 +7,4 @@ import DocCardList from "@theme/DocCardList";
 
 # vLLM recipes
 
-Sources:
-- vLLM [nlzy/vllm-gfx906](https://github.com/nlzy/vllm-gfx906)
-- triton [nlzy/triton-gfx906](https://github.com/nlzy/triton-gfx906)
-
 <DocCardList />
