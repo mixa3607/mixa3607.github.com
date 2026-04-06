@@ -1,6 +1,6 @@
 ---
 title: Qwen3 VL Embedding 8B
-sidebar_position: 20
+sidebar_position: 201
 ---
 
 import DocCardList from "@theme/DocCardList";
