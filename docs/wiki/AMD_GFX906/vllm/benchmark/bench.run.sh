@@ -1,4 +1,5 @@
 #!/bin/bash
+# curl -L 'https://github.com/mixa3607/mixa3607.github.com/raw/refs/heads/master/docs/wiki/AMD_GFX906/vllm/benchmark/bench.run.sh' | bash
 
 export CONFIGS="$(cat bench-configs.yaml)"
 export VLLM_INST_HOST="127.0.0.1"

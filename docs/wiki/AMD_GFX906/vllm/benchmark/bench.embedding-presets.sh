@@ -1,4 +1,5 @@
 #!/bin/bash
+# curl -L 'https://github.com/mixa3607/mixa3607.github.com/raw/refs/heads/master/docs/wiki/AMD_GFX906/vllm/benchmark/bench.embedding-presets.sh' | bash
 
 echo '
 baseArgs: >
