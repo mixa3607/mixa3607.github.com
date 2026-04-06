@@ -4,6 +4,10 @@ sidebar_position: 20
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+import benchCompreltionPresets from "!!raw-loader!./bench.compreltion-presets.sh";
+import benchEmbeddingPresets from "!!raw-loader!./bench.embedding-presets.sh";
+import benchRun from "!!raw-loader!./bench.run.sh";
 
 # vLLM benchmark
 
@@ -18,262 +22,21 @@ kubectl exec -n ns-vllm pods/$(kubectl get pods -n ns-vllm -l app.kubernetes.io/
 ### 2. Run suite
 
 <Tabs>
-  <TabItem value="compl" label="Completion bench" default>
-
-```bash
-CONFIGS='
-baseArgs: >
-  --ignore-eos --num-warmups 4
-benchmarks:
-  ########### TG
-  ## prefix-len 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16 --random-output-len 256
-      --num-prompts 10 --max-concurrency=1
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16 --random-output-len 256
-      --num-prompts=30 --max-concurrency=4
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16 --random-output-len 256
-      --num-prompts 60 --max-concurrency 8
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16 --random-output-len 256
-      --num-prompts 90 --max-concurrency 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16 --random-output-len 256
-      --num-prompts 120 --max-concurrency 32
-
-  ## prefix-len 4096
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 4096 --random-output-len 256
-      --num-prompts 10 --max-concurrency=1
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 4096 --random-output-len 256
-      --num-prompts=30 --max-concurrency=4
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 4096 --random-output-len 256
-      --num-prompts 60 --max-concurrency 8
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 4096 --random-output-len 256
-      --num-prompts 90 --max-concurrency 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 4096 --random-output-len 256
-      --num-prompts 120 --max-concurrency 32
-
-  ## prefix-len 16384
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16384 --random-output-len 256
-      --num-prompts 10 --max-concurrency=1
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16384 --random-output-len 256
-      --num-prompts=30 --max-concurrency=4
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16384 --random-output-len 256
-      --num-prompts 60 --max-concurrency 8
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16384 --random-output-len 256
-      --num-prompts 90 --max-concurrency 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 16384 --random-output-len 256
-      --num-prompts 120 --max-concurrency 32
-
-  ## prefix-len 32768
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 32768 --random-output-len 256
-      --num-prompts 10 --max-concurrency=1
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 32768 --random-output-len 256
-      --num-prompts=30 --max-concurrency=4
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 32768 --random-output-len 256
-      --num-prompts 60 --max-concurrency 8
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 32768 --random-output-len 256
-      --num-prompts 90 --max-concurrency 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 32768 --random-output-len 256
-      --num-prompts 120 --max-concurrency 32
-
-  ## prefix-len 65536
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 65536 --random-output-len 256
-      --num-prompts 10 --max-concurrency=1
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 65536 --random-output-len 256
-      --num-prompts=30 --max-concurrency=4
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 65536 --random-output-len 256
-      --num-prompts 60 --max-concurrency 8
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 65536 --random-output-len 256
-      --num-prompts 90 --max-concurrency 16
-  - workload: tg
-    args: >
-      --dataset-name random
-      --random-input-len 0 --random-prefix-len 65536 --random-output-len 256
-      --num-prompts 120 --max-concurrency 32
-
-  ########### PP
-  - workload: pp
-    args: >
-      --dataset-name random
-      --random-input-len 8192 --random-prefix-len 0 --random-output-len 1
-      --num-prompts 10 --max-concurrency 1
-  - workload: pp
-    args: >
-      --dataset-name random
-      --random-input-len 16384 --random-prefix-len 0 --random-output-len 1
-      --num-prompts 10 --max-concurrency 1
-  - workload: pp
-    args: >
-      --dataset-name random
-      --random-input-len 32768 --random-prefix-len 0 --random-output-len 1
-      --num-prompts=10 --max-concurrency 1
-  - workload: pp
-    args: >
-      --dataset-name random
-      --random-input-len 65536 --random-prefix-len 0 --random-output-len 1
-      --num-prompts 10 --max-concurrency 1
-'
-
-export MODEL="$(cat vllm.yaml | yq '.model' -r)"
-for (( i=0; i<$(echo "$CONFIGS" | yq '.benchmarks | length'); i++ )); do
-  BENCHMARK_NAME="$(echo "$CONFIGS" | yq ".benchmarks[$i].workload" -r)"
-  BENCHMARK_ARGS="$(echo "$CONFIGS" | yq ".benchmarks[$i].args + \" \" + .baseArgs" -r | tr '\n' ' ')"
-
-  echo "Run $BENCHMARK_NAME ($BENCHMARK_ARGS)"
-  vllm bench serve $BENCHMARK_ARGS \
-    --host 127.0.0.1 --model $MODEL --save-detailed --save-result \
-    --metadata metadata.workload="$BENCHMARK_NAME" metadata.image="$IMAGE_NAME"
-done
-```
-
+  <TabItem value="compl" label="Completion presets" default>
+  <CodeBlock language="bash" title="Setup">
+    {benchCompreltionPresets}
+  </CodeBlock>
   </TabItem>
-  <TabItem value="embed" label="Embedding bench">
-
-```bash
-CONFIGS='
-baseArgs: >
-  --num-warmups 4
-benchmarks:
-  ########### EMBED 2048
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 2048
-      --num-prompts 32 --max-concurrency 1
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 2048
-      --num-prompts 64 --max-concurrency 4
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 2048
-      --num-prompts 128 --max-concurrency 8
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 2048
-      --num-prompts 256 --max-concurrency 16
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 2048
-      --num-prompts 384 --max-concurrency 32
-
-  ########### EMBED 256
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 256
-      --num-prompts 64 --max-concurrency 1
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 256
-      --num-prompts 128 --max-concurrency 4
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 256
-      --num-prompts 256 --max-concurrency 8
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 256
-      --num-prompts 384 --max-concurrency 16
-  - workload: embed
-    args: >
-      --dataset-name random
-      --random-input 256
-      --num-prompts 512 --max-concurrency 32
-'
-
-export MODEL="$(cat vllm.yaml | yq '.model' -r)"
-for (( i=0; i<$(echo "$CONFIGS" | yq '.benchmarks | length'); i++ )); do
-  BENCHMARK_NAME="$(echo "$CONFIGS" | yq ".benchmarks[$i].workload" -r)"
-  BENCHMARK_ARGS="$(echo "$CONFIGS" | yq ".benchmarks[$i].args + \" \" + .baseArgs" -r | tr '\n' ' ')"
-
-  echo "Run $BENCHMARK_NAME ($BENCHMARK_ARGS)"
-  vllm bench serve $BENCHMARK_ARGS \
-    --host 127.0.0.1 --model $MODEL --endpoint /v1/embeddings --backend openai-embeddings \
-    --save-detailed --save-result \
-    --metadata metadata.workload="$BENCHMARK_NAME" metadata.image="$IMAGE_NAME"
-done
-```
-
+  <TabItem value="embed" label="Embedding presets">
+  <CodeBlock language="bash" title="Setup">
+    {benchEmbeddingPresets}
+  </CodeBlock>
   </TabItem>
 </Tabs>
+
+<CodeBlock language="bash" title="Run">
+  {benchRun}
+</CodeBlock>
 
 ### 3. Copy results to local fs (optional)
 
