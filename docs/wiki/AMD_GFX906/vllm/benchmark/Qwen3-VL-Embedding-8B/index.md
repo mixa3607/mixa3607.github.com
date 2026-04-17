@@ -1,6 +1,7 @@
 ---
 title: Qwen3 VL Embedding 8B
 sidebar_position: 201
+hide_table_of_contents: true
 ---
 
 import DocCardList from "@theme/DocCardList";

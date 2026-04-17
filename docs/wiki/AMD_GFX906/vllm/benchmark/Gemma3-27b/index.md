@@ -1,6 +1,7 @@
 ---
 title: Gemma3 27B
 sidebar_position: 101
+hide_table_of_contents: true
 ---
 
 import DocCardList from "@theme/DocCardList";
