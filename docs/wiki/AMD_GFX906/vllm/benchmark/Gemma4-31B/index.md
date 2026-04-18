@@ -11,8 +11,8 @@ import VllmHelmNote from "/docs/wiki/AMD_GFX906/vllm/\_helm_note.mdx";
 # Gemma3 27B benchmarks
 
 - TP/DP/PP - tensor/data/pipeline parallelism
-- TG t/s - text generation is tps
-- PP t/s - prompt processing is tps
+- TG t/s - text generation in tps
+- PP t/s - prompt processing in tps
 
 <TableWrapper>
 
