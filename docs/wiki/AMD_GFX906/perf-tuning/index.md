@@ -27,6 +27,8 @@ done
 
 ## Overclock / PowerLimit
 
+upp - https://github.com/sibradzic/upp
+
 ```bash
 # PP parameters
 echo '
