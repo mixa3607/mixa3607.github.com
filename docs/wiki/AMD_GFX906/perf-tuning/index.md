@@ -21,7 +21,7 @@ AMDGPU_DEVICES=(
   '4b:00.0'
 )
 for (( i=0; i<${#AMDGPU_DEVICES[@]}; i++ )); do
-  sudo ./pcie_set_speed.sh "${AMDGPU_DEVICES[$i]}"
+  sudo ./pcie_set_speed.sh "${AMDGPU_DEVICES[$i]}" 16
 done
 ```
 
