@@ -96,6 +96,34 @@ for (( i=0; i<${#AMDGPU_DEVICES[@]}; i++ )); do
 done
 ```
 
+How to check errs?
+```bash
+$ sudo rocm-smi --showrasinfo
+========================= ROCm System Management Interface =========================
+===================================== RAS Info =====================================
+
+GPU[0]:         RAS INFO
+         Block       Status    Correctable Error  Uncorrectable Error  
+           UMC        ENABLED                  0                    0  
+          SDMA        ENABLED                  0                    0  
+           GFX        ENABLED                  0                    0  
+         MMHUB        ENABLED                  0                    0  
+         ATHUB        ENABLED  
+      PCIE_BIF        ENABLED                  0                    0  
+           HDP        ENABLED                  0                    0  
+     XGMI_WAFL       DISABLED  
+            DF        ENABLED  
+           SMN        ENABLED  
+           SEM        ENABLED  
+           MP0        ENABLED  
+           MP1        ENABLED  
+          FUSE        ENABLED  
+____________________________________________________________________________________
+
+GPU[1]:         RAS INFO
+...
+```
+
 > Changing smcPPTable/TdcLimitGfx 350 => 150 reduced the hotspot by 10+- degrees with almost no drop in performance in vllm
 > <div style={{ maxWidth: "35rem", justifySelf: "center" }}>
 >  ![temperatures](./temperatures.png)
