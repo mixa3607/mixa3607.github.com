@@ -7,7 +7,7 @@ import DocCardList from "@theme/DocCardList";
 
 # Perf tuning
 
-## Force PCIE speed
+## Force PCIe speed
 
 ```bash
 curl -L https://github.com/corundum/corundum/raw/refs/heads/master/fpga/lib/pcie/scripts/pcie_set_speed.sh > pcie_set_speed.sh
@@ -21,7 +21,7 @@ AMDGPU_DEVICES=(
   '4b:00.0'
 )
 for (( i=0; i<${#AMDGPU_DEVICES[@]}; i++ )); do
-  sudo ./pcie_set_speed.sh "${AMDGPU_DEVICES[$i]}" 16
+  sudo ./pcie_set_speed.sh "${AMDGPU_DEVICES[$i]}" 4
 done
 ```
 
