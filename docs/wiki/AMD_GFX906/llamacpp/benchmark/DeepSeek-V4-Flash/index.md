@@ -52,20 +52,20 @@ export COMP_THREADS=32
 
 <TableWrapper>
 
-| model                  |       size | threads | n_ubatch |  fa |            test |           t/s |
-| ---------------------- | ---------: | ------: | -------: | --: | --------------: | ------------: |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |          pp2048 | 149.50 ± 0.27 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |           tg256 |  15.66 ± 0.21 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  pp2048 @ d4096 | 131.20 ± 0.66 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |   tg256 @ d4096 |  14.75 ± 0.34 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  pp2048 @ d8192 | 122.50 ± 0.45 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |   tg256 @ d8192 |  14.60 ± 0.08 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d16384 | 108.32 ± 0.29 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d16384 |  14.05 ± 0.09 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d32768 |  88.58 ± 0.27 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d32768 |  13.45 ± 0.07 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d65536 |  64.47 ± 0.14 |
-| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d65536 |  11.85 ± 0.19 |
+| model                  |       size | threads | n_ubatch |  fa |            test | ggml b10092-rocm-7.2.4 | mxxm b10095-rocm-7.2.4 |
+| ---------------------- | ---------: | ------: | -------: | --: | --------------: | ---------------------: | ---------------------: |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |          pp2048 |          149.50 ± 0.27 |         156.60 ± 19.40 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |           tg256 |           15.66 ± 0.21 |           15.46 ± 0.27 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  pp2048 @ d4096 |          131.20 ± 0.66 |          155.22 ± 1.02 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |   tg256 @ d4096 |           14.75 ± 0.34 |           14.95 ± 0.11 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  pp2048 @ d8192 |          122.50 ± 0.45 |          143.81 ± 1.96 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |   tg256 @ d8192 |           14.60 ± 0.08 |           14.67 ± 0.10 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d16384 |          108.32 ± 0.29 |          125.56 ± 0.39 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d16384 |           14.05 ± 0.09 |           14.10 ± 0.08 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d32768 |           88.58 ± 0.27 |           98.48 ± 0.53 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d32768 |           13.45 ± 0.07 |           13.36 ± 0.12 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 | pp2048 @ d65536 |           64.47 ± 0.14 |           70.35 ± 0.11 |
+| deepseek4 ?B MXFP4 MoE | 145.29 GiB |      32 |     2048 |   1 |  tg256 @ d65536 |           11.85 ± 0.19 |           11.96 ± 0.15 |
 
 </TableWrapper>
 
