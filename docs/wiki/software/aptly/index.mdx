@@ -1,0 +1,159 @@
+---
+title: Aptly
+sidebar_position: 10
+---
+
+# Aptly - менеджер apt репозиториев
+
+Aptly allows you to mirror remote repositories, manage local package repositories, take snapshots, pull new versions of packages along with dependencies, publish as Debian repository.
+
+You can try it right now for free, aptly is available both as CLI tool and HTTP REST service.
+
+> Official site https://www.aptly.info
+
+## Подготовка gpg ключа
+
+Можно и без ключа (`Trusted: yes`), но лучше не надо.
+
+```bash
+cat >gpg-script <<EOF
+  %echo Generating a OpenPGP key
+  Key-Type: rsa
+  Key-Length: 4096
+  Name-Real: mixa3607
+  Name-Comment: gfx906 apt repo key
+  Name-Email: 30209772+mixa3607@users.noreply.github.com
+  Expire-Date: 20360601T000000
+  %commit
+  %echo done
+EOF
+gpg --batch --generate-key gpg-script
+rm gpg-script
+gpg --list-secret-keys --keyid-format LONG
+```
+
+Если нужно экспортировать ключ то это делается как
+```bash
+gpg --export-secret-keys '<keyid>' > ./exported-key.key
+...
+gpg --import ./exported-key.key
+```
+
+## Создаём репозиторий
+- https://www.aptly.info/doc/aptly/repo/create/
+Create:
+```bash
+aptly repo create \
+  -comment="AMD ROCm for gfx906 https://github.com/mixa3607/ML-gfx906" \
+  -component="main" \
+  -distribution="$(. /etc/os-release && echo "$VERSION_CODENAME")" \
+  rocm-gfx906
+```
+
+## Публикуем на s3
+- https://www.aptly.info/doc/aptly/publish/repo/
+- https://www.aptly.info/doc/aptly/publish/list/
+
+Сам S3 должен быть сконфигурирован под public read
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "*"
+                ]
+            },
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::apt-gfx906/*"
+            ]
+        },
+        ...
+    ]
+}
+```
+
+Далее нужно прописать для aptly настройки
+```json title="~/.aptly.conf"
+{
+    ...
+    "S3PublishEndpoints": {
+        "s3-gfx906": {
+            "region": "none",
+            "bucket": "apt-gfx906",
+            "endpoint": "https://s3.test.com",
+            "awsAccessKeyID": "<AccessAccessAccessAccessAccess>",
+            "awsSecretAccessKey": "<SecretSecretSecretSecretSecretSecret>",
+            "awsSessionToken": "",
+            "prefix": "",
+            "acl": "public-read",
+            "storageClass": "",
+            "encryptionMethod": "",
+            "plusWorkaround": false,
+            "disableMultiDel": false,
+            "forceSigV2": false,
+            "debug": false
+        }
+    },
+    ...
+}
+```
+
+Публикуем и проверяем:
+```bash
+$ aptly publish repo -architectures=amd64 rocm-gfx906 s3:s3-gfx906:ubuntu
+$ aptly publish list
+Published repositories:
+  * s3:s3-gfx906:ubuntu/noble [amd64] publishes {main: [rocm-gfx906]: AMD ROCm for gfx906 https://github.com/mixa3607/ML-gfx906}
+```
+
+Выгружаем gpg pub key:
+```bash
+$ gpg --export --armor > ./gpg
+$ # manual upload or with cli
+```
+
+## Добавляем пакеты
+- https://www.aptly.info/doc/aptly/repo/add/
+
+```bash
+aptly repo add rocm-gfx906 *.deb
+```
+
+## Список пакетов
+- https://www.aptly.info/doc/aptly/mirror/show/
+
+```bash
+aptly repo show -with-packages rocm-gfx906
+```
+
+## Удаляем пакеты
+- https://www.aptly.info/doc/aptly/repo/remove/
+- https://www.aptly.info/doc/feature/query/
+
+Удалть ВСЕ пакеты:
+```bash
+aptly repo remove rocm-gfx906 'Name (% *)'
+```
+
+## Снепшотим стейт и пушим
+- https://www.aptly.info/doc/aptly/snapshot/create/
+- https://www.aptly.info/doc/aptly/snapshot/show/
+- https://www.aptly.info/doc/aptly/snapshot/list/
+
+```bash
+aptly snapshot create 20260802001858 from repo rocm-gfx906
+aptly snapshot show 20260802001858
+aptly snapshot list
+
+aptly publish snapshot 20260802001858 s3:s3-gfx906:ubuntu
+```
+
+## See also
+- https://www.aptly.info/tutorial/repo/
+- https://www.dmosk.ru/miniinstruktions.php?mini=aptly-repo
