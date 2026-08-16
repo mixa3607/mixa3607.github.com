@@ -108,6 +108,51 @@ label fan2 "FAN-CPU2"
 ignore fan3
 ```
 
+### BMC sensors
+
+То, что видит сам BMC из прошивки [Depo OpenBMC 1.0.1](./BMC/OpenBMC_mod_f1/index.mdx). Топология датчиков описывается конфигами entity-manager (`/usr/share/entity-manager/configurations/dpc627-a-system.json`), значения читаются из sysfs hwmon (драйверы ядра `nct7802`, `aspeed-pwm-tacho`) демонами `hwmontempsensor` (температуры) и `fansensor` (вентиляторы) из пакета `dbus-sensors`, и экспортируются в D-Bus на `/xyz/openbmc_project/sensors/{temperature,fan_tach,fan_pwm}/*`.
+
+В саму логику и Web UI датчики не выведены, но в ОС BMC видны.
+
+#### Temperature
+
+<TableWrapper>
+
+| D-Bus sensor  | I2C addr | hwmon        | attr         | Ед. | Назначение   |
+| ------------- | -------- | ------------ | ------------ | --- | ------------ |
+| Outlet2 Temp  | 0x28     | `nct7802`    | `temp1_input`| °C  | выход (верх) |
+| PCH Temp      | 0x28     | `nct7802`    | `temp2_input`| °C  | PCH          |
+| MB Temp       | 0x28     | `nct7802`    | `temp3_input`| °C  | плата        |
+| Outlet1 Temp  | 0x28     | `nct7802`    | `temp4_input`| °C  | выход (низ)  |
+| Inlet2 Temp   | 0x2f     | `nct7802`    | `temp1_input`| °C  | вход (верх)  |
+| M.2 Temp      | 0x2f     | `nct7802`    | `temp2_input`| °C  | M.2          |
+| Eth Temp      | 0x2f     | `nct7802`    | `temp3_input`| °C  | сеть         |
+| Inlet1 Temp   | 0x2f     | `nct7802`    | `temp4_input`| °C  | вход (низ)   |
+
+</TableWrapper>
+
+Оба чипа `Nuvoton NCT7802` на шине `i2c0`, каждый по 4 канала терморезисторов (в DT `channel@0..3`, `temperature-mode = "thermistor"`). В хостовой ОС это те же `nct7802-i2c-0-28` / `nct7802-i2c-0-2f` из `$ sensors`.
+
+#### Fans
+
+<TableWrapper>
+
+| D-Bus sensor | I2C addr | hwmon                  | attr               | Ед. | Назначение   |
+| ------------ | -------- | ---------------------- | ------------------ | --- | ------------ |
+| FAN1         | 0x28     | `nct7802`              | `fan1_input`       | RPM | корпус. 1    |
+| FAN2         | 0x28     | `nct7802`              | `fan2_input`       | RPM | корпус. 2    |
+| FAN3         | 0x28     | `nct7802`              | `fan3_input`       | RPM | корпус. 3    |
+| FAN4         | 0x2f     | `nct7802`              | `fan1_input`       | RPM | корпус. 4    |
+| FAN5         | 0x2f     | `nct7802`              | `fan2_input`       | RPM | корпус. 5    |
+| FAN6         | 0x2f     | `nct7802`              | `fan3_input`       | RPM | корпус. 6    |
+| CPU_FAN1     | —        | `aspeed_pwm_tacho`     | `fan1_input` (tach ch0) | RPM | CPU 1    |
+| CPU_FAN2     | —        | `aspeed_pwm_tacho`     | `fan2_input` (tach ch1) | RPM | CPU 2    |
+| CPU_FAN PWM  | —        | `aspeed_pwm_tacho`     | `pwm1..pwm2`       | %   | управление CPU_FAN1/2 |
+
+</TableWrapper>
+
+FAN1–FAN6 (`I2CFan`, index 0–2) — тахометры тех же двух NCT7802. CPU_FAN1/2 (`AspeedFan`) — встроенный в AST2500 PWM/TACH-контроллер (`pwm-tacho-controller@1e786000`, каналы tach 0 и 1), это не I2C. Отличие от хост ОС: там процессорные вертушки видны как `FAN-CPU1/FAN-CPU2` от Super I/O Fintek `F81768D` (`f81768d-isa-0a20`).
+
 ## Manual fan control
 
 ### Cpu fans
