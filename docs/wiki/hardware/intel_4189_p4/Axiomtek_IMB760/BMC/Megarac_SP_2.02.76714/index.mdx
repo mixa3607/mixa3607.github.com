@@ -185,6 +185,49 @@ $ /var/payload/dio/dio r /dev/i2c-3 0x50 5
 
 Если MAC слетел (`ipmitool lan print` показывает нули) — правильный MAC можно взять из этой EEPROM, не ища наклейку. Это эталон для восстановления `ethaddr`/`eth1addr` из раздела [MAC repair](#mac-repair). На пре-релизных платах бывает не запрограммирована (вся 0xff) — тогда эталон только с наклейки.
 
+## BIOS reset / boot flags via IPMI {#bios-reset-boot-flags}
+
+Удалённый «сброс» BIOS без железа — стандартные IPMI boot flags. BMC хранит флаг, BIOS читает его при старте. Работает независимо от состояния хоста: не нужен ни DIO-разъём, ни питание платы от хоста (в отличие от [DIO](../../Digital_IO/index.mdx), который без хоста обесточен).
+
+### Только сбросить CMOS на следующем буте
+
+```console
+$ ipmitool -H <BMC-IP> -U admin -P admin -I lanplus chassis bootdev none clear-cmos=yes
+Set Boot Device to none
+```
+
+### Сбросить CMOS и войти в BIOS Setup
+
+```console
+$ ipmitool -H <BMC-IP> -U admin -P admin -I lanplus chassis bootdev bios clear-cmos=yes
+```
+
+### Проверить, что вооружено
+
+```console
+$ ipmitool -H <BMC-IP> -U admin -P admin -I lanplus chassis bootparam get 5
+Boot parameter 5 is valid/unlocked
+Boot parameter data: 8080000000
+ Boot Flags :
+   - Boot Flag Valid
+   - Options apply to only next boot
+   - CMOS Clear
+   - Boot Device Selector : No override
+```
+
+### Снять флаг
+
+```console
+$ ipmitool -H <BMC-IP> -U admin -P admin -I lanplus chassis bootdev none
+```
+
+Заметки:
+
+- Флаг **одноразовый** (`Options apply to only next boot`) — сам сбросится после одного бута.
+- `Boot Device Selector: No override` = только сброс CMOS без входа в Setup; `Force Boot into BIOS Setup` = ещё и вход в Setup.
+- После сброса CMOS BIOS нужно настроить заново — хост сам не поднимется, пока не сконфигурируешь BIOS.
+- Работает через LAN IPMI, физический доступ не нужен. OEM-очистка CMOS в этой прошивке (`PDK_ClearCMOS`) — заглушка, не используется.
+
 ## Получение рутового шелла {#root-shell}
 Скачиваем [config_sh.bak](./config_sh.bak), заливаем его через `Maintenance` => `Backup/Restore Configuration`, идём по ssh на bmc и вуаля.
 ```console
