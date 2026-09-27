@@ -8,6 +8,10 @@ import TableWrapper from "@site/src/components/TableWrapper.tsx";
 
 # ROCm \* hip graphs \* gpus \* ctx bench
 
+:::warning Outdated
+These numbers were collected with an older toolchain (llama.cpp b9180, ROCm 6.3.3 / 7.2.3) and are kept for history. See the current run: **[ROCm 6.3.3 … 10.0 bench](../rocm-comparison-2026-09/index.mdx)**.
+:::
+
 - `ROCm 6.3.3|7.2.3 * hip graphs OFF|ON * gpus 1|2|4 * ctx 0|16K|32K`
 - software: [`llama.cpp`](https://github.com/ggml-org/llama.cpp) ([b9180-rocm-7.2.1](https://hub.docker.com/layers/mixa3607/llama.cpp-gfx906))
 - mobo: [`imb760`](/docs/wiki/hardware/intel_4189_p4/Axiomtek_IMB760/index.mdx)

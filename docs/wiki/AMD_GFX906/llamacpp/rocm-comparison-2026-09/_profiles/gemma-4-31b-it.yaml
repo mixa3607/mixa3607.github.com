@@ -1,0 +1,12 @@
+gemma-4-31B-it[tensor]:
+  args:
+    hf-repo: unsloth/gemma-4-31B-it-GGUF:Q8_K_XL
+    flash-attn: true
+    split-mode: [tensor]
+    device:
+      - [ROCm0, ROCm1, ROCm2, ROCm3]
+      - [ROCm0, ROCm1]
+    n-prompt: 2048
+    ubatch-size: 2048
+    n-gen: 256
+    n-depth: [0, 16384, 32768, 65536]

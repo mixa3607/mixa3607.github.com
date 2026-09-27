@@ -1,0 +1,219 @@
+---
+title: ROCm 6.3.3 … 10.0 bench
+sidebar_position: 31
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+import globalProfile from "!!raw-loader!./_profiles/global.yaml";
+import qwenProfile from "!!raw-loader!./_profiles/Qwen3.8.yaml";
+import gemma26Profile from "!!raw-loader!./_profiles/gemma-4-26b-a4b-it.yaml";
+import gemma31Profile from "!!raw-loader!./_profiles/gemma-4-31b-it.yaml";
+import tableFormat from "!!raw-loader!./_profiles/result-format-site.yaml";
+import runScript from "!!raw-loader!./_profiles/run.sh";
+
+import SummaryTable from "./_table-summary.mdx";
+import DepthTable from "./_table-depth.mdx";
+import Qwen38Table from "./_table-Qwen3.8-27B.mdx";
+import QwenFlashTable from "./_table-Qwen3.8-Flash-Next.mdx";
+import Gemma26Table from "./_table-gemma-4-26B-A4B-it.mdx";
+import Gemma31Table from "./_table-gemma-4-31B-it.mdx";
+
+# ROCm 6.3.3 / 7.2.4 / 7.14 / 10.0 bench
+
+- `ROCm 6.3.3|7.2.4|7.14|10.0 * split tensor|layer * GPUs 1|2|4 * ctx 0|16K|32K|64K`
+- llama.cpp [`v0.5.0`](https://github.com/ggml-org/llama.cpp/releases/tag/v0.5.0) ([`7fe450e`](https://github.com/ggml-org/llama.cpp/commit/7fe450e19305b828c199d602c23a8337aaa1f03b)), `0.5.0-dev (build 1)`
+- toolchain: [`ML-gfx906`](https://github.com/mixa3607/ML-gfx906) @ [`7a0d586`](https://github.com/mixa3607/ML-gfx906/commit/7a0d586fffd352b6a5a607f1ca7bb709e035b9ab) — images `registry.arkprojects.space/apps/llama.cpp-gfx906:v0.5.0-rocm-<ver>-7a0d586-pre`
+- mobo: [`imb760`](/docs/wiki/hardware/intel_4189_p4/Axiomtek_IMB760/index.mdx)
+- 4× MI50/MI60 32 GiB behind PCIe bridges: GPU↔bridge 16 GT/s x16, bridge↔CPU **x8** (CPU root port is x8), `HIP_VISIBLE_DEVICES=1,0,3,2`, `GGML_HIP_GRAPHS=ON`
+- numbers below are the average of 5 llama-bench repetitions
+
+:::info
+The previous run (llama.cpp b9180, ROCm 6.3.3/7.2.3, hip graphs off/on) is kept on the [ROCm _ graphs _ GPUs bench](../rocm-comparison/index.md) page.
+:::
+
+## Results
+
+Full per-model tables: [Qwen3.8-27B](#qwen38-27b), [Qwen3.8-Flash-Next](#qwen38-flash-next), [gemma-4-26B-A4B-it](#gemma-4-26b-a4b-it), [gemma-4-31B-it](#gemma-4-31b-it).
+
+`Avg tok/s` for `Prompt 2048 / Gen 0` is prompt processing, for `Prompt 0 / Gen 256` is generation at the given `Depth`.
+
+### Summary vs ROCm 6.3.3
+
+Median change across configurations (rows = one config, one ROCm version), relative to 6.3.3.
+In parentheses: number of configs with a statistically significant change (more than 2σ of the combined measurement noise).
+
+<SummaryTable />
+
+### Change by context depth
+
+Median across all models and configurations.
+
+<DepthTable />
+
+### Takeaways
+
+- Generation: **+17…+29%** on every 7.x ROCm in almost every configuration; the largest gains are at short context (`+20…+37%` depending on model and GPU count). MoE Qwen3.8-Flash-Next gains the least (`+7…+10%`), dense models gain the most.
+- Prompt processing on **4 GPUs (tensor)**: consistent **+8…+25%**, 10.0 is the fastest (Qwen3.8-27B `+22.5%`, gemma-4-26B `+23.4%`).
+- Prompt processing on **2 GPUs (tensor)**: mixed. Qwen3.8-27B +8…+19% on 7.14/10.0, gemma-4-26B +3…+11%, but 7.2.4 regresses on gemma (`−5…−9%`) and gemma-4-31B (`−7…−14%`).
+- **Single GPU (layer, gemma-4-26B) at 32K/64K context**: the only stable regression, `−2…−4%` on 7.14/10.0 and `−8…−11%` on 7.2.4; at 0/16K the new versions are equal or faster.
+- Gain shrinks with context depth: median `+20%` at depth 0 down to `+15%` at 64K (10.0); 7.2.4 drops from `+10%` to `+5%`.
+- 7.2.4 is the weakest of the 7.x for prompt processing. 7.14 and 10.0 are near parity overall; 10.0 wins the Qwen3.8-27B 4-GPU prompt case by `+6…+12%`.
+
+## Bench
+
+The command is rendered from the YAML profiles by
+[`build-bench-command.py`](https://github.com/mixa3607/ML-gfx906/tree/master/llama.cpp/build-context/extra/bench-profiles),
+copied to the container together with the profiles. `ROCM_VER` selects the result directory,
+so one loop over the presets covers all ROCm versions.
+
+<CodeBlock language="bash" title="run.sh">
+  {runScript}
+</CodeBlock>
+
+<Tabs>
+  <TabItem value="global" label="global.yaml" default>
+    <CodeBlock language="yaml" title="bench-profiles/global.yaml">
+      {globalProfile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="qwen" label="Qwen3.8.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/Qwen3.8.yaml">
+      {qwenProfile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="gemma26" label="gemma-4-26b-a4b-it.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/gemma-4-26b-a4b-it.yaml">
+      {gemma26Profile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="gemma31" label="gemma-4-31b-it.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/gemma-4-31b-it.yaml">
+      {gemma31Profile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="format" label="table format">
+    <CodeBlock language="yaml" title="result-format-site.yaml">
+      {tableFormat}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+## Software
+
+<details>
+  <summary>Build config and version</summary>
+
+```text title="llama-cli --version"
+version: 0.5.0-dev (build 1, commit 7fe450e)
+built with GNU 13.3.0 for Linux x86_64
+```
+
+```text title="cmake"
+-DCMAKE_BUILD_TYPE=Release
+-DLLAMA_BUILD_TESTS=OFF
+-DGGML_BACKEND_DL=ON
+-DGGML_HIP=ON
+-DGGML_HIP_GRAPHS=ON
+-DGGML_HIP_RCCL=ON
+-DAMDGPU_TARGETS=gfx906
+-DGGML_RPC=ON
+-DGGML_CPU_ALL_VARIANTS=ON
+-DGGML_AVX512=ON
+-DGGML_AVX512_VBMI=ON
+-DGGML_AVX512_VNNI=ON
+-DGGML_AVX512_BF16=ON
+```
+
+Extra HIP flags (`LLAMA_CMAKE_HIP_FLAGS`):
+
+| ROCm         | HIP flags                               |
+| ------------ | --------------------------------------- |
+| 6.3.3, 7.2.4 | _(none)_                                |
+| 7.14, 10.0   | `-mllvm -amdgpu-sched-strategy=max-ilp` |
+
+</details>
+
+<details>
+  <summary>Topology</summary>
+
+```text title="rocm-smi --showtopo"
+================================ Weight between two GPUs =================================
+       GPU0         GPU1         GPU2         GPU3
+GPU0   0            40           40           40
+GPU1   40           0            40           40
+GPU2   40           40           0            40
+GPU3   40           40           40           0
+
+================================= Hops between two GPUs ==================================
+       GPU0         GPU1         GPU2         GPU3
+GPU0   0            2            2            2
+GPU1   2            0            2            2
+GPU2   2            2            0            2
+GPU3   2            2            2            0
+
+=============================== Link Type between two GPUs ===============================
+       GPU0         GPU1         GPU2         GPU3
+GPU0   0            PCIE         PCIE         PCIE
+GPU1   PCIE         0            PCIE         PCIE
+GPU2   PCIE         PCIE         0            PCIE
+GPU3   PCIE         PCIE         PCIE         0
+
+GPU[0..3]: (Topology) Numa Node: 0, Numa Affinity: 0
+```
+
+```text title="lspci"
+31:00.0
+                LnkCap: Port #0, Speed 16GT/s, Width x16, ASPM L1, Exit Latency L1 <64us
+                LnkSta: Speed 16GT/s, Width x8 (downgraded)
+34:00.0
+                LnkCap: Port #2, Speed 16GT/s, Width x16, ASPM L1, Exit Latency L1 <64us
+                LnkSta: Speed 16GT/s, Width x8 (downgraded)
+4b:00.0
+                LnkCap: Port #0, Speed 16GT/s, Width x16, ASPM L1, Exit Latency L1 <64us
+                LnkSta: Speed 16GT/s, Width x8 (downgraded)
+4e:00.0
+                LnkCap: Port #2, Speed 16GT/s, Width x16, ASPM L1, Exit Latency L1 <64us
+                LnkSta: Speed 16GT/s, Width x8 (downgraded)
+```
+
+```text title="llama-bench --list-devices"
+ggml_cuda_init: found 4 ROCm devices (Total VRAM: 131008 MiB):
+  Device 0: AMD Instinct MI60 / MI50, gfx906:sramecc+:xnack- (0x906), VMM: no, Wave Size: 64, VRAM: 32752 MiB
+  Device 1: AMD Instinct MI60 / MI50, gfx906:sramecc+:xnack- (0x906), VMM: no, Wave Size: 64, VRAM: 32752 MiB
+  Device 2: AMD Instinct MI60 / MI50, gfx906:sramecc+:xnack- (0x906), VMM: no, Wave Size: 64, VRAM: 32752 MiB
+  Device 3: AMD Instinct MI60 / MI50, gfx906:sramecc+:xnack- (0x906), VMM: no, Wave Size: 64, VRAM: 32752 MiB
+```
+
+```text title="cpu / numa"
+model name: Genuine Intel(R) CPU 0000%@
+threads: 76 (2 NUMA nodes, GPUs on node 0)
+```
+
+</details>
+
+## Qwen3.8-27B
+
+[`bartowski/Qwen3.8-27B-GGUF:Q8_0`](https://huggingface.co/bartowski/Qwen3.8-27B-GGUF) — dense 27B, Q8_0, 27.1 GiB. tensor split over 4 and 2 GPUs, flash-attn on.
+
+<Qwen38Table />
+
+## Qwen3.8-Flash-Next
+
+[`bartowski/Qwen3.8-Flash-Next-GGUF:Q4_K_M`](https://huggingface.co/bartowski/Qwen3.8-Flash-Next-GGUF) — MoE A3B, Q4_K_M, ~111 GiB. layer split over 4 GPUs, flash-attn auto.
+
+<QwenFlashTable />
+
+## gemma-4-26B-A4B-it
+
+[`bartowski/google_gemma-4-26B-A4B-it-GGUF:Q8_0`](https://huggingface.co/bartowski/google_gemma-4-26B-A4B-it-GGUF) — MoE A4B, Q8_0, 25.0 GiB. tensor split over 4 and 2 GPUs plus layer split on 1 GPU, flash-attn on. Both presets share this table, `Split`/`GPUs` columns tell them apart.
+
+<Gemma26Table />
+
+## gemma-4-31B-it
+
+[`unsloth/gemma-4-31B-it-GGUF:Q8_K_XL`](https://huggingface.co/unsloth/gemma-4-31B-it-GGUF) — dense 31B, Q8_K_XL, 32.6 GiB. tensor split over 4 and 2 GPUs, flash-attn on.
+
+<Gemma31Table />

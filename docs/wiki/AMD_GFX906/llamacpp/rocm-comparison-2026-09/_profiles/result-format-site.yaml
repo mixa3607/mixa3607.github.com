@@ -1,0 +1,31 @@
+version: 1
+
+columns:
+  rocm_version:
+    name: ROCm
+  split_mode:
+    name: Split
+  device_count:
+    field: devices
+    name: GPUs
+    format: count
+    separator: "/"
+  flash_attn:
+    name: FA
+    format: map
+    map:
+      -1: auto
+      0: "off"
+      1: "on"
+  n_prompt:
+    name: Prompt
+  n_gen:
+    name: Gen
+  n_depth:
+    name: Depth
+  avg_ts:
+    name: Avg tok/s
+    precision: 2
+  stddev_ts:
+    name: ±
+    precision: 2
