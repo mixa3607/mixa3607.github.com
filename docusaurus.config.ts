@@ -31,7 +31,11 @@ const config: Config = {
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true,
+    // Keep the v4 flags enabled in 3.9; newer defaults affect MDX and raw-loader.
+    v4: {
+      removeLegacyPostBuildHeadAttribute: true,
+      useCssCascadeLayers: true,
+    },
   },
   plugins: [
     [
