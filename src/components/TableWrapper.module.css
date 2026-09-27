@@ -1,0 +1,149 @@
+.wrapper {
+  position: relative;
+  padding-inline-end: 2.75rem;
+  margin-bottom: var(--ifm-leading);
+}
+
+.toolbar {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.toolbar[hidden] {
+  display: none;
+}
+
+.settings {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.4rem;
+}
+
+.settings {
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wrapper:hover .settings,
+.wrapper:focus-within .settings,
+.settings[aria-expanded='true'],
+.settings[data-active='true'] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .settings {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -0.4rem;
+  inset-inline-end: -0.3rem;
+  border-radius: 1rem;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.65rem;
+  background: var(--ifm-color-primary);
+  color: var(--ifm-background-surface-color);
+}
+
+.panel {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+}
+
+.panel summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.panel[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.filters label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.toolbar :global(.table-select__menu) {
+  z-index: 5;
+}
+
+.sortLevel, .actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sortLevel > span {
+  min-width: 4rem;
+}
+
+.panel button, .panel select {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  font: inherit;
+  max-width: 100%;
+}
+
+.panel button {
+  cursor: pointer;
+}
+
+.panel button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+.scroll table {
+  margin-bottom: 0;
+}
+
+.heading {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.heading span {
+  white-space: nowrap;
+  color: var(--ifm-color-primary);
+}

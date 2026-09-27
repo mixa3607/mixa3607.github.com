@@ -28,11 +28,6 @@ const config: Config = {
     defaultLocale: 'en',
     locales: ['en'],
   },
-  scripts: [
-    {
-      src: "https://cdn.jsdelivr.net/gh/tofsjonas/sortable@latest/dist/sortable.auto.min.js",
-    }
-  ],
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -73,7 +68,6 @@ const config: Config = {
         theme: {
           customCss: [
             './src/css/custom.css',
-            './src/css/sortable-tables.css',
           ],
         },
       } satisfies Preset.Options,
