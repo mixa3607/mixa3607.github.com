@@ -1,0 +1,35 @@
+gemma-4-26B-A4B-it[tensor]:
+  args:
+    hf-repo: bartowski/google_gemma-4-26B-A4B-it-GGUF:Q8_0
+    flash-attn: true
+    split-mode: tensor
+    device:
+      - [ROCm0, ROCm1, ROCm2, ROCm3]
+      - [ROCm0, ROCm1]
+    n-prompt: 2048
+    ubatch-size: 2048
+    n-gen: 256
+    n-depth: [0, 16384, 32768, 65536]
+gemma-4-26B-A4B-it[layer]:
+  args:
+    hf-repo: bartowski/google_gemma-4-26B-A4B-it-GGUF:Q8_0
+    flash-attn: true
+    split-mode: layer
+    device:
+      - [ROCm0]
+    n-prompt: 2048
+    ubatch-size: 2048
+    n-gen: 256
+    n-depth: [0, 16384, 32768, 65536]
+gemma-4-26B-A4B-it[cpu]:
+  env:
+    HIP_VISIBLE_DEVICES: ""
+  args:
+    hf-repo: bartowski/google_gemma-4-26B-A4B-it-GGUF:Q8_0
+    split-mode: layer
+    device: none
+    n-prompt: 2048
+    ubatch-size: 2048
+    n-gen: 256
+    n-depth: [0, 16384]
+    threads: 32

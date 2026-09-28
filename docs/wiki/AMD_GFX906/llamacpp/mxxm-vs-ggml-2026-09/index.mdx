@@ -1,0 +1,147 @@
+---
+title: mxxm fork vs ggml
+sidebar_position: 32
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import CodeBlock from "@theme/CodeBlock";
+
+import globalGgml from "!!raw-loader!./_profiles/global-ggml.yaml";
+import globalMxxm from "!!raw-loader!./_profiles/global-mxxm.yaml";
+import qwenProfile from "!!raw-loader!./_profiles/Qwen3.8.yaml";
+import gemma26Profile from "!!raw-loader!./_profiles/gemma-4-26b-a4b-it.yaml";
+import gemma31Profile from "!!raw-loader!./_profiles/gemma-4-31b-it.yaml";
+import runScript from "!!raw-loader!./_profiles/run.sh";
+
+import SummaryVs from "./_table-summary-vs.mdx";
+import SummaryForkRocm from "./_table-summary-fork-rocm.mdx";
+import Qwen38Table from "./_table-Qwen3.8-27B-vs.mdx";
+import QwenFlashTable from "./_table-Qwen3.8-Flash-Next-vs.mdx";
+import Gemma26Table from "./_table-gemma-4-26B-A4B-it-vs.mdx";
+import Gemma31Table from "./_table-gemma-4-31B-it-vs.mdx";
+
+# mxxm fork vs ggml upstream
+
+- fork: [`mxxm-t/mx-llama.cpp`](https://github.com/mxxm-t/mx-llama.cpp) `b10951` ([`a2780ef`](https://github.com/mxxm-t/mx-llama.cpp/commit/a2780ef6b5849018f968f5385391571fa2c1e0b3)), `0.3.0-dev`
+- upstream: [`ggml-org/llama.cpp`](https://github.com/ggml-org/llama.cpp) `v0.5.0` ([`7fe450e`](https://github.com/ggml-org/llama.cpp/commit/7fe450e19305b828c199d602c23a8337aaa1f03b)), `0.5.0-dev`
+- toolchain: [`ML-gfx906`](https://github.com/mixa3607/ML-gfx906) — `7a0d586-pre`
+- ROCm **6.3.3** and **10.0**; the fork was not measured on 7.x
+- same hardware, topology, HBM2 mem OC, models and profiles as [ROCm 6.3.3 … 10.0 bench](../rocm-comparison-2026-09/index.mdx)
+- 5 llama-bench repetitions per point
+
+:::warning base skew
+The fork trails upstream: `b10951` is upstream `5542318` (`0.3.0-dev`) plus one fork commit, while ggml is `v0.5.0` (`0.5.0-dev`) three days later. Part of the delta below is upstream drift, not the fork.
+:::
+
+## Results
+
+`Δ` is mxxm vs ggml (positive = fork faster). Full per-model tables: [Qwen3.8-27B](#qwen38-27b), [Qwen3.8-Flash-Next](#qwen38-flash-next), [gemma-4-26B-A4B-it](#gemma-4-26b-a4b-it), [gemma-4-31B-it](#gemma-4-31b-it).
+
+`Prompt 2048 / Gen 0` is prompt processing, `Prompt 0 / Gen 256` is generation at the given `Depth`.
+
+### Fork vs upstream
+
+Median `Δ` across configurations, per ROCm version. In parentheses: number of configs with a statistically significant change (more than 2σ of the combined measurement noise).
+
+<SummaryVs />
+
+### ROCm under the fork
+
+Median `Δ` of mxxm on 10.0 relative to mxxm on 6.3.3.
+
+<SummaryForkRocm />
+
+### Takeaways
+
+- **Q8_0 models love the fork.** Generation is much faster on both ROCm versions: Qwen3.8-27B `+34…+63%` on 6.3.3 and `+8…+47%` on 10.0; gemma-4-26B `+14…+85%`; gemma-4-31B `+13…+57%`. The biggest gains are tensor split on 4 GPUs, single-GPU layer split gains the least (`+4…+18%`).
+- **Prompt processing wins mostly on 10.0**: Qwen3.8-27B `+8…+29%`, gemma-4-31B `+2…+33%`, gemma-4-26B `+10…+28%` (except 64K context, where tensor models are flat or slightly negative). On 6.3.3 prefill is mixed, including a `−9%` regression for single-GPU gemma-4-26B layer.
+- **Qwen3.8-Flash-Next (Q4_K MoE) regresses**: prompt processing `−11…−21%` on 10.0 and `−3…+1%` on 6.3.3, generation `−2.6…−4.6%` on both. Known issue, the fork is not a win for this model yet.
+- **Under the fork, ROCm 10.0 is the better base**: `+14…+24%` prompt and `+7…+12%` generation vs 6.3.3 (Flash-Next prompt is the exception, `−7%`). This is a stronger preference than with ggml, where 7.14/10.0 are near parity.
+
+## Builds and env
+
+| Build | Repo                  | Ref                | Version     | Image                           |
+| ----- | --------------------- | ------------------ | ----------- | ------------------------------- |
+| ggml  | `ggml-org/llama.cpp`  | `v0.5.0` `7fe450e` | `0.5.0-dev` | `v0.5.0-rocm-<ver>-7a0d586-pre` |
+| mxxm  | `mxxm-t/mx-llama.cpp` | `b10951` `a2780ef` | `0.3.0-dev` | `b10951-rocm-<ver>-801bf2e-pre` |
+
+Both are built with the same Dockerfile and cmake flags (see [Software](../rocm-comparison-2026-09/index.mdx#software)); HIP flags differ per ROCm only: 6.3.3 has none, 10.0 uses `-mllvm -amdgpu-sched-strategy=max-ilp`.
+
+Environment declared in the bench profiles and passed to `llama-bench`:
+
+| Variable                    | ggml      | mxxm      | Note      |
+| --------------------------- | --------- | --------- | --------- |
+| `HIP_VISIBLE_DEVICES`       | `1,0,3,2` | `1,0,3,2` |           |
+| `HSA_FORCE_FINE_GRAIN_PCIE` | `1`       | `1`       |           |
+| `HSA_XNACK`                 | `0`       | `0`       |           |
+| `GGML_ENABLE_CUSTOM_AR`     | —         | `1`       | mxxm only |
+| `GGML_CUDA_REPACK_Q8_0`     | —         | `1`       | mxxm only |
+| `LLAMA_ENABLE_MTP_OPT`      | —         | `1`       | mxxm only |
+| `GGML_TP_AR_TWOSHOT`        | —         | `1`       | mxxm only |
+| `LLAMA_PLE_SHARD`           | —         | `0`       | mxxm only |
+| `GPU_MAX_HW_QUEUES`         | —         | `8`       | mxxm only |
+
+The mxxm-only variables are no-ops in ggml.
+
+## Bench
+
+Same `run.sh` for both builds: `ROCM_VER` selects the result directory, `PRESETS` lists the models.
+
+<CodeBlock language="bash" title="run.sh">
+  {runScript}
+</CodeBlock>
+
+<Tabs>
+  <TabItem value="global-ggml" label="global.yaml (ggml)" default>
+    <CodeBlock language="yaml" title="bench-profiles/global.yaml">
+      {globalGgml}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="global-mxxm" label="global.yaml (mxxm)">
+    <CodeBlock language="yaml" title="bench-profiles/global.yaml">
+      {globalMxxm}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="qwen" label="Qwen3.8.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/Qwen3.8.yaml">
+      {qwenProfile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="gemma26" label="gemma-4-26b-a4b-it.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/gemma-4-26b-a4b-it.yaml">
+      {gemma26Profile}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="gemma31" label="gemma-4-31b-it.yaml">
+    <CodeBlock language="yaml" title="bench-profiles/gemma-4-31b-it.yaml">
+      {gemma31Profile}
+    </CodeBlock>
+  </TabItem>
+</Tabs>
+
+Model profiles are identical for both builds, only `global.yaml` differs.
+
+## Qwen3.8-27B
+
+[`bartowski/Qwen3.8-27B-GGUF:Q8_0`](https://huggingface.co/bartowski/Qwen3.8-27B-GGUF) — dense 27B, Q8_0, 27.1 GiB. tensor split over 4 and 2 GPUs, flash-attn on.
+
+<Qwen38Table />
+
+## Qwen3.8-Flash-Next
+
+[`bartowski/Qwen3.8-Flash-Next-GGUF:Q4_K_M`](https://huggingface.co/bartowski/Qwen3.8-Flash-Next-GGUF) — MoE A3B, Q4_K_M, ~111 GiB. layer split over 4 GPUs, flash-attn auto. The regression case: the fork is slower on every point.
+
+<QwenFlashTable />
+
+## gemma-4-26B-A4B-it
+
+[`bartowski/google_gemma-4-26B-A4B-it-GGUF:Q8_0`](https://huggingface.co/bartowski/google_gemma-4-26B-A4B-it-GGUF) — MoE A4B, Q8_0, 25.0 GiB. tensor split over 4 and 2 GPUs plus layer split on 1 GPU, flash-attn on. Both presets share this table, `Split`/`GPUs` columns tell them apart.
+
+<Gemma26Table />
+
+## gemma-4-31B-it
+
+[`unsloth/gemma-4-31B-it-GGUF:Q8_K_XL`](https://huggingface.co/unsloth/gemma-4-31B-it-GGUF) — dense 31B, Q8_K_XL, 32.6 GiB. tensor split over 4 and 2 GPUs, flash-attn on.
+
+<Gemma31Table />
