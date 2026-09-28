@@ -29,6 +29,7 @@ import Gemma31Table from "./_table-gemma-4-31B-it.mdx";
 - mobo: [`imb760`](/docs/wiki/hardware/intel_4189_p4/Axiomtek_IMB760/index.mdx)
 - 4× MI50/MI60 32 GiB behind PCIe bridges: GPU↔bridge 16 GT/s x16, bridge↔CPU **x8** (CPU root port is x8), `HIP_VISIBLE_DEVICES=1,0,3,2`, `GGML_HIP_GRAPHS=ON`
 - numbers below are the average of 5 llama-bench repetitions
+- raw JSONL: [`_data/`](https://github.com/mixa3607/mixa3607.github.com/tree/master/docs/wiki/AMD_GFX906/llamacpp/rocm-comparison-2026-09/_data) (`rocm-<ver>/<preset>.jsonl`)
 
 :::info
 The previous run (llama.cpp b9180, ROCm 6.3.3/7.2.3, hip graphs off/on) is kept on the [ROCm _ graphs _ GPUs bench](../rocm-comparison/index.md) page.

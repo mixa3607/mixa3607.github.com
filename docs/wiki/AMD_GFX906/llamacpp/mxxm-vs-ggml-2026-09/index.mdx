@@ -29,6 +29,7 @@ import Gemma31Table from "./_table-gemma-4-31B-it-vs.mdx";
 - ROCm **6.3.3** and **10.0**; the fork was not measured on 7.x
 - same hardware, topology, HBM2 mem OC, models and profiles as [ROCm 6.3.3 … 10.0 bench](../rocm-comparison-2026-09/index.mdx)
 - 5 llama-bench repetitions per point
+- raw JSONL: [`_data/ggml`](https://github.com/mixa3607/mixa3607.github.com/tree/master/docs/wiki/AMD_GFX906/llamacpp/mxxm-vs-ggml-2026-09/_data/ggml) and [`_data/mxxm`](https://github.com/mixa3607/mixa3607.github.com/tree/master/docs/wiki/AMD_GFX906/llamacpp/mxxm-vs-ggml-2026-09/_data/mxxm)
 
 :::warning base skew
 The fork trails upstream: `b10951` is upstream `5542318` (`0.3.0-dev`) plus one fork commit, while ggml is `v0.5.0` (`0.5.0-dev`) three days later. Part of the delta below is upstream drift, not the fork.
