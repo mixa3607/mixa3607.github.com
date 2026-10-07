@@ -1,5 +1,5 @@
 ---
-title: ROCm 6.3.3 … 10.0 bench
+title: ROCm 6.3.3 … 10.1 bench
 sidebar_position: 31
 ---
 
@@ -21,11 +21,11 @@ import QwenFlashTable from "./_table-Qwen3.8-Flash-Next.mdx";
 import Gemma26Table from "./_table-gemma-4-26B-A4B-it.mdx";
 import Gemma31Table from "./_table-gemma-4-31B-it.mdx";
 
-# ROCm 6.3.3 / 7.2.4 / 7.14 / 10.0 bench
+# ROCm 6.3.3 / 7.2.4 / 7.14 / 10.0 / 10.1 bench
 
-- `ROCm 6.3.3|7.2.4|7.14|10.0 * split tensor|layer * GPUs 1|2|4 * ctx 0|16K|32K|64K`
+- `ROCm 6.3.3|7.2.4|7.14|10.0|10.1 * split tensor|layer * GPUs 1|2|4 * ctx 0|16K|32K|64K`
 - llama.cpp [`v0.5.0`](https://github.com/ggml-org/llama.cpp/releases/tag/v0.5.0) ([`7fe450e`](https://github.com/ggml-org/llama.cpp/commit/7fe450e19305b828c199d602c23a8337aaa1f03b)), `0.5.0-dev (build 1)`
-- toolchain: [`ML-gfx906`](https://github.com/mixa3607/ML-gfx906) @ [`7a0d586`](https://github.com/mixa3607/ML-gfx906/commit/7a0d586fffd352b6a5a607f1ca7bb709e035b9ab) — images `registry.arkprojects.space/apps/llama.cpp-gfx906:v0.5.0-rocm-<ver>-7a0d586-pre`
+- toolchain: [`ML-gfx906`](https://github.com/mixa3607/ML-gfx906) @ [`7a0d586`](https://github.com/mixa3607/ML-gfx906/commit/7a0d586fffd352b6a5a607f1ca7bb709e035b9ab) for ROCm 6.3.3–10.0 and @ [`bcf2f98`](https://github.com/mixa3607/ML-gfx906/commit/bcf2f98) for 10.1. Images: `registry.arkprojects.space/apps/llama.cpp-gfx906:v0.5.0-rocm-<ver>-7a0d586-pre` and `registry.arkprojects.space/apps/llama.cpp-gfx906:v0.5.0-rocm-10.1-max-ilp`, respectively; the latter is based on `registry.arkprojects.space/apps/rocm-gfx906:10.1-complete`.
 - mobo: [`imb760`](/docs/wiki/hardware/intel_4189_p4/Axiomtek_IMB760/index.mdx)
 - 4× MI50/MI60 32 GiB behind PCIe bridges: GPU↔bridge 16 GT/s x16, bridge↔CPU **x8** (CPU root port is x8), `HIP_VISIBLE_DEVICES=1,0,3,2`, `GGML_HIP_GRAPHS=ON`
 - numbers below are the average of 5 llama-bench repetitions
@@ -64,19 +64,23 @@ Median across all models and configurations.
 
 ### Takeaways
 
-- Generation: **+17…+29%** on every 7.x ROCm in almost every configuration; the largest gains are at short context (`+20…+37%` depending on model and GPU count). MoE Qwen3.8-Flash-Next gains the least (`+7…+10%`), dense models gain the most.
-- Prompt processing on **4 GPUs (tensor)**: consistent **+8…+25%**, 10.0 is the fastest (Qwen3.8-27B `+22.5%`, gemma-4-26B `+23.4%`).
-- Prompt processing on **2 GPUs (tensor)**: mixed. Qwen3.8-27B +8…+19% on 7.14/10.0, gemma-4-26B +3…+11%, but 7.2.4 regresses on gemma (`−5…−9%`) and gemma-4-31B (`−7…−14%`).
-- **Single GPU (layer, gemma-4-26B) at 32K/64K context**: the only stable regression, `−2…−4%` on 7.14/10.0 and `−8…−11%` on 7.2.4; at 0/16K the new versions are equal or faster.
-- Gain shrinks with context depth: median `+20%` at depth 0 down to `+15%` at 64K (10.0); 7.2.4 drops from `+10%` to `+5%`.
-- 7.2.4 is the weakest of the 7.x for prompt processing. 7.14 and 10.0 are near parity overall; 10.0 wins the Qwen3.8-27B 4-GPU prompt case by `+6…+12%`.
+- **Generation** is faster than 6.3.3 on every tested 7.x/10.x version. Per-model median gains are **+19…+29%** for the dense Qwen3.8-27B and Gemma 31B models, **+16…+20%** for MoE Gemma 26B, and **+6…+9%** for Qwen3.8-Flash-Next. Newer ROCm does not automatically mean faster generation.
+- **Prompt processing on 4 GPUs (tensor)** benefits most from 7.14/10.0/10.1: median gains versus 6.3.3 are **+9…+20%** for Qwen3.8-27B, **+18…+19%** for Gemma 26B, and **+15…+16%** for Gemma 31B. The winner depends on model and context; 7.2.4 is much closer to the baseline.
+- **Prompt processing on 2 GPUs (tensor)** is mixed. On 7.14/10.0/10.1, Qwen3.8-27B gains **+3…+20%**, Gemma 26B ranges from **−0.5% to +10.5%**, and Gemma 31B from **−3.4% to +5.7%**, depending on depth. 7.2.4 regresses on Gemma 26B (**−2…−8%**) and Gemma 31B (**−7…−14%**).
+- **Single-GPU prompt processing (layer, Gemma 26B)** regresses at 32K/64K context: **−2…−7%** on 7.14/10.0/10.1 and **−9…−11%** on 7.2.4. At depth 0, 7.14/10.0/10.1 gain **+5…+7%**; at 16K they remain within about **±1.5%** of 6.3.3.
+- **Gains generally shrink with context depth.** Across all models and both tests, median gains versus 6.3.3 fall from **+18…+20%** at depth 0 to **+14…+15%** at 64K for 7.14/10.0/10.1; 7.2.4 drops from **+10%** to **+5%**.
+- **7.14, 10.0 and 10.1 are close overall**, while 7.2.4 is weakest for prompt processing. Across the same 32 prompt-processing and 32 generation configurations, 10.1's geometric mean of paired tok/s ratios is **−1.34% / −1.18%** versus 10.0 and **−0.95% / −1.72%** versus 7.14. Qwen Flash prompt processing is a notable exception: its median gain versus 6.3.3 is only **+1.1%** on 10.1, compared with **+8.6…+8.9%** on 10.0/7.14. These are separate runs, not contemporaneous controls; small differences should not be overinterpreted.
 
 ## Bench
 
 The command is rendered from the YAML profiles by
 [`build-bench-command.py`](https://github.com/mixa3607/ML-gfx906/tree/master/llama.cpp/build-context/extra/bench-profiles),
 copied to the container together with the profiles. `ROCM_VER` selects the result directory,
-so one loop over the presets covers all ROCm versions.
+so one loop over the presets covers all ROCm versions. Each version has 64 GPU measurements,
+using the same model revisions, split modes, device order and context depths.
+Gemma 31B uses the snapshot
+`c1ac76e99d5513b141e8adde7288b85c3f9c32ec/gemma-4-31B-it-UD-Q8_K_XL.gguf`
+in the shared Hugging Face cache; on 10.1 it was selected directly with `--model` instead of resolving `--hf-repo`.
 
 <CodeBlock language="bash" title="run.sh">
   {runScript}
@@ -138,10 +142,10 @@ built with GNU 13.3.0 for Linux x86_64
 
 Extra HIP flags (`LLAMA_CMAKE_HIP_FLAGS`):
 
-| ROCm         | HIP flags                               |
-| ------------ | --------------------------------------- |
-| 6.3.3, 7.2.4 | _(none)_                                |
-| 7.14, 10.0   | `-mllvm -amdgpu-sched-strategy=max-ilp` |
+| ROCm             | HIP flags                               |
+| ---------------- | --------------------------------------- |
+| 6.3.3, 7.2.4     | _(none)_                                |
+| 7.14, 10.0, 10.1 | `-mllvm -amdgpu-sched-strategy=max-ilp` |
 
 </details>
 
